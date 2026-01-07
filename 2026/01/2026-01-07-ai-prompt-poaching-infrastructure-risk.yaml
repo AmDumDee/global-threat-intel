@@ -1,0 +1,89 @@
+---
+threat_summary:
+  title: "The Convergence of AI Prompt Poaching and Infrastructure Sabotage"
+  report_date: "2026-01-07"
+  threat_id: "TI-20260107-ULTRA"
+  severity_business: "Critical"
+  severity_technical: "High"
+  
+  executive_summary: |
+    The first week of 2026 has exposed a three-pronged attack on corporate stability. First, 'Prompt Poaching' via malicious Chrome extensions has compromised the AI conversations of over 900,000 users, leaking corporate IP to C2 servers. Second, the 'Snowflake' and AT&T breaches have been linked to a persistent, decentralized collective ('The Com') capable of compromising national-level infrastructure. Third, the weaponization of natural language for firewall configuration and state-level cyber-strikes (Venezuela) signals a shift where technical complexity is no longer a barrier to high-impact disruption.
+
+threat_intelligence:
+  what_happened:
+    incident_overview: |
+      Intelligence confirms that at least two 'Featured' Chrome extensions (Chat GPT for Chrome and AI Sidebar) have been exfiltrating complete ChatGPT and DeepSeek session data to remote servers every 30 minutes. This 'Prompt Poaching' allows attackers to scrape sensitive DOM elements containing proprietary code and strategy. Concurrently, Resecurity has exposed 'The Com' (Scattered LAPSUS$ Hunters), revealing that key actors behind the Snowflake breach—which impacted 160+ organizations including Ticketmaster and Santander—leveraged foreign infrastructure in Turkey to avoid prosecution. Finally, the US has signaled a new era of public cyber-power, allegedly using cyber-capabilities to disable power grids during kinetic operations.
+    
+    affected_organizations:
+      - name: "AT&T"
+        impact: "Metadata of nearly all US customers compromised; $370k ransom paid for data deletion."
+      - name: "OpenAI/DeepSeek Users"
+        impact: "900,000+ users potentially leaked proprietary AI prompts and internal corporate URLs."
+      - name: "Snowflake Clients"
+        impact: "160+ high-profile organizations targeted via credential exploitation and configuration gaps."
+    
+    attack_methodology: |
+      Attackers are shifting from direct exploits to 'interception of intent.' In AI environments, they use rogue browser extensions to scrape the Document Object Model (DOM) of chat sessions. In infrastructure attacks, they exploit 'The Com' social networks to recruit insiders (e.g., active-duty military) who provide access to telecommunications subscriber records and call logs. State actors are moving toward infrastructure control-plane disruption to achieve geopolitical objectives.
+
+  why_it_matters:
+    business_risks:
+      financial_exposure: |
+        Direct ransom costs (e.g., AT&T's $370k) are minimal compared to the loss of IP value via AI leaks. The aggregate value of stolen corporate strategy across 900k users is estimated in the hundreds of millions.
+      
+      regulatory_compliance: |
+        Massive exposure under GDPR and CCPA for telecommunications metadata leaks. AI leaks likely violate internal NDAs and industry-specific privacy regulations (HIPAA/FINRA).
+      
+      competitive_impact: |
+        The leakage of 'Internal URLs' and 'Prompts' gives competitors a roadmap of your product development and strategic vulnerabilities. 
+      
+      operational_disruption: |
+        The Venezuela incident proves that cyber-operations can now reliably trigger physical utility outages, threatening global business continuity in conflict zones.
+    
+    industry_patterns:
+      affected_sectors:
+        - "Telecommunications"
+        - "Financial Services"
+        - "Technology/AI"
+        - "Critical Infrastructure"
+      
+      trend_analysis: |
+        This is a worsening pattern. We are moving away from 'malware' toward 'malicious interfaces.' Attackers are embedding themselves in the tools employees use to be productive (AI sidebars, browsers), making detection nearly impossible for traditional endpoint security.
+
+technical_context:
+  vulnerability_details:
+    cve_identifier: "N/A (Logic/Interface Abuse)"
+    vulnerability_type: "DOM Scraping & API Hijacking"
+    affected_systems: 
+      - "Google Chrome / Microsoft Edge"
+      - "ChatGPT/DeepSeek Web Interfaces"
+      - "Snowflake Data Environments"
+    exploitation_status: "Active"
+  
+  attack_indicators:
+    - "Unauthorized Chrome extensions requesting 'anonymous analytics' permissions."
+    - "Unusual outbound traffic to 'chatsaigpt[.]com' or 'deepaichats[.]com'."
+    - "Anomalous access to Snowflake environments from non-standard geographic locations (e.g., Turkey/Finland)."
+
+source_articles:
+  - title: "A Cyberattack Was Part of the US Assault on Venezuela"
+    url: "https://www.schneier.com/"
+    date: "2026-01-07"
+  - title: "Two Chrome Extensions Caught Stealing ChatGPT and DeepSeek Chats"
+    url: "https://thehackernews.com/2026/01/two-chrome-extensions-caught-stealing.html"
+    date: "2026-01-06"
+  - title: "Turning plain language into firewall rules"
+    url: "https://www.helpnetsecurity.com/2026/01/06/research-natural-language-firewall-configuration/"
+    date: "2026-01-06"
+  - title: "OpenAI is reportedly getting ready to test ads in ChatGPT"
+    url: "https://www.bleepingcomputer.com/news/artificial-intelligence/openai-is-reportedly-getting-ready-to-test-ads-in-chatgpt/"
+    date: "2026-01-06"
+  - title: "Resecurity Went on the Cyber Offensive"
+    url: "https://securityaffairs.com/186586/cyber-crime/resecurity-went-on-the-cyber-offensive-when-shiny-objects-trick-shiny-hunters.html"
+    date: "2026-01-06"
+
+metadata:
+  author: "Am Dum Dee"
+  last_updated: "2026-01-07"
+  threat_category: ["AI Supply Chain", "Infrastructure", "Cyber Espionage"]
+  affected_industries: ["Telecom", "Tech", "Government"]
+  confidence_level: "High"
