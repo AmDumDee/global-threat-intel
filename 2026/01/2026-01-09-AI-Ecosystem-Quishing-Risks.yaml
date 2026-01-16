@@ -1,0 +1,117 @@
+---
+threat_summary:
+  title: "AI Infrastructure Reconnaissance and MFA-Resilient Quishing Campaigns"
+  report_date: "2026-01-09"
+  threat_id: "TI-20260109-AQB"
+  severity_business: "Critical"
+  severity_technical: "High"
+  
+  executive_summary: |
+    The early 2026 threat landscape is dominated by two converging vectors: the systematic reconnaissance of Large Language Model (LLM) infrastructure and the escalation of 'Quishing' (QR-code phishing) by North Korean state actors (Kimsuky). Attackers are successfully bypassing Multi-Factor Authentication (MFA) by forcing users onto unmanaged mobile devices. Furthermore, unauthenticated Remote Code Execution (RCE) flaws in core security management consoles like Trend Micro Apex Central (CVSS 9.8) indicate that even the 'defenders' are currently high-value targets for total system compromise.
+
+threat_intelligence:
+  what_happened:
+    incident_overview: |
+      GreyNoise honeypots detected a massive spike in scanning for LLM infrastructure, with over 80,000 sessions in 11 days targeting 73+ AI endpoints (GPT, Claude, Gemini, Llama). This indicates 'professional reconnaissance' to identify leaked API keys and misconfigured self-hosted AI servers (Ollama). Simultaneously, the FBI warned that North Korean actors are using malicious QR codes to bypass enterprise security policies. By scanning a code, an executive unknowingly transfers an active session to an attacker-controlled environment, effectively 'cloning' the user identity without triggering MFA alerts.
+    
+    affected_organizations:
+      - name: "Self-Hosted AI Research Entities"
+        impact: "Leakage of commercial AI API keys and R&D text queries."
+      - name: "U.S. Think Tanks and Gov Agencies"
+        impact: "Theft of session tokens and cloud identity hijacking by Kimsuky."
+      - name: "Trend Micro Apex Central Users"
+        impact: "Potential unauthenticated SYSTEM-level takeover via malicious DLL loading."
+    
+    attack_methodology: |
+      Attackers use 'Pivot Tactics.' For AI, they use simple queries ('hi', 'how many states...') to fingerprint which LLM is running and if it is vulnerable to SSRF. For Quishing, they use 'Contextual Lures' (fake conference invites/questionnaires) to move the victim from a protected PC to an unprotected mobile device. Once on mobile, they capture session tokens that can be replayed to access corporate cloud environments indefinitely.
+
+  why_it_matters:
+    business_risks:
+      financial_exposure: |
+        Direct loss of AI API credits (thousands of dollars per day if leaked) and the high cost of identity remediation once a 'C-Suite' identity is cloned.
+      
+      regulatory_compliance: |
+        CISA's retirement of 10 Emergency Directives signifies a shift toward BOD 22-01 compliance; federal contractors failing to patch 'Known Exploited Vulnerabilities' (like the Trend Micro flaw) face immediate contract disqualification.
+      
+      competitive_impact: |
+        State-sponsored theft of internal LLM queries reveals the exact direction of a company’s AI R&D, allowing competitors to leapfrog innovation.
+      
+      operational_disruption: |
+        Trend Micro's RCE (CVE-2025-69258) allows attackers to shut down or manipulate an entire organization's endpoint security management, leading to total visibility loss during an attack.
+    
+    industry_patterns:
+      affected_sectors:
+        - "Artificial Intelligence & SaaS"
+        - "Government & Academic Research"
+        - "Cybersecurity Managed Services"
+      
+      trend_analysis: |
+        We are entering the 'Post-MFA' era. Attackers no longer try to 'guess' passwords; they 'steal' active sessions through cross-device manipulation (Quishing).
+
+technical_context:
+  vulnerability_details:
+    cve_identifier: "CVE-2025-69258 / CVE-2025-55182"
+    vulnerability_type: "LoadLibraryEX RCE / LLM Infrastructure Probing"
+    affected_systems: 
+      - "Trend Micro Apex Central (Build < 7190)"
+      - "Ollama (Self-hosted LLM) / OpenAI-compatible APIs"
+    exploitation_status: "Active Scanning / PoC Available"
+  
+  attack_indicators:
+    - "High volume of text queries like 'How many letter r are in strawberry?' to internal endpoints."
+    - "Sudden session logins from mobile browsers (JA4H signatures) immediately after an email is opened."
+
+strategic_response:
+  executive_decisions:
+    - priority: "Critical"
+      decision: "Immediate Patch of Trend Micro Apex Central"
+      business_justification: "Critical 9.8 flaw allows SYSTEM-level takeover of your security backbone."
+      cost_estimate: "Low (Patch available)"
+    
+    - priority: "High"
+      decision: "Implement QR-Code Blocking at Email Gateway"
+      business_justification: "Breaks the Kimsuky 'Quishing' chain and forces authentication onto managed devices."
+      cost_estimate: "Configuration change within existing SEC-stack."
+
+  governance_implications:
+    board_reporting: |
+      Track 'Unmanaged Mobile Cloud Access' metrics. If C-suite users are accessing core SaaS via unmanaged devices, the risk of 'Quishing' is 10x higher.
+    
+    disclosure_requirements: |
+      AI API key leakage must be treated as a credential breach under new 2026 data privacy frameworks.
+
+analysis_and_insights:
+  uncomfortable_truths: |
+    AI 'Vibe Coding' and rapid deployment have created a massive, unmapped attack surface of internal LLM endpoints that are currently being indexed by adversaries. Most organizations don't even know how many 'Ollama' instances their developers have spun up. Additionally, Anthropic's 'fake ban' viral screenshots show that reputation-attacks against AI providers are becoming a standard psychological operations (PsyOps) tactic to sow distrust in legitimate tools.
+
+  strategic_lessons:
+    - "Mobile is the weak link in the identity chain. Protect the session, not just the password."
+    - "Security vendors are high-value targets; their management consoles are the keys to the kingdom."
+
+forward_outlook:
+  predictions: |
+    Expect 'Quishing' to evolve into 'AR-Phishing' where malicious QR codes are placed in physical locations (coworking spaces/conferences) to target traveling executives. AI infrastructure scanning will move from 'discovery' to 'injection,' where attackers feed malicious data into your LLM to poison your internal decision-making.
+
+source_articles:
+  - title: "Honeypots detect threat actors mass scanning LLM infrastructure"
+    url: "https://www.scworld.com/news/honeypots-detect-threat-actors-mass-scanning-llm-infrastructure"
+    date: "2026-01-08"
+  - title: "Trend Micro fixed a remote code execution in Apex Central"
+    url: "https://securityaffairs.com/186733/hacking/trend-micro-fixed-a-remote-code-execution-in-apex-central.html"
+    date: "2026-01-09"
+  - title: "Anthropic: Viral Claude 'Banned' message isn’t real"
+    url: "https://www.bleepingcomputer.com/news/artificial-intelligence/anthropic-viral-claude-banned-and-reported-to-authorities-message-isnt-real/"
+    date: "2026-01-09"
+  - title: "CISA Retires 10 Emergency Cybersecurity Directives"
+    url: "https://thehackernews.com/2026/01/cisa-retires-10-emergency-cybersecurity.html"
+    date: "2026-01-09"
+  - title: "FBI Warns North Korean Hackers Using Malicious QR Codes"
+    url: "https://thehackernews.com/2026/01/fbi-warns-north-korean-hackers-using.html"
+    date: "2026-01-09"
+
+metadata:
+  author: "Am Dum Dee"
+  last_updated: "2026-01-16"
+  threat_category: ["AI Security", "State-Sponsored Phishing", "Vulnerability Management"]
+  affected_industries: ["Finance", "Technology", "Government"]
+  confidence_level: "High"
