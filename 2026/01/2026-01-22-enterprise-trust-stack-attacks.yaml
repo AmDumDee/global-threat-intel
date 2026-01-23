@@ -1,0 +1,129 @@
+---
+threat_summary:
+  title: "Enterprise Trust Stack Under Active Exploitation"
+  report_date: "2026-01-22"
+  threat_id: "TI-20260122-001"
+  severity_business: "Critical"
+  severity_technical: "High"
+  
+  executive_summary: |
+    Multiple coordinated threat campaigns observed in January 2026 demonstrate a clear shift in attacker strategy: direct exploitation of trusted enterprise systems rather than technical edge cases. Identity providers, firewalls, software supply chains, and vulnerability management processes are now primary attack surfaces.
+
+    These attacks bypass traditional controls such as MFA, endpoint protection, and patch SLAs by abusing trust assumptions embedded in enterprise workflows. The result is faster compromise, earlier data exfiltration, and higher regulatory and financial exposure.
+
+    The threat is time-sensitive. Several attack chains showed exploitation occurring within days of disclosure or patch release, indicating high automation and operational maturity among threat actors.
+
+threat_intelligence:
+  what_happened:
+    incident_overview: |
+      In November 2025, a new ransomware family named Osiris targeted a large food service operator using a malicious driver to disable security tools before encrypting systems and exfiltrating data. The attack relied on trusted drivers and standard administrative tools rather than novel exploits.
+
+      Concurrently, Okta disclosed active vishing campaigns where attackers impersonated IT staff, guided employees through live login sessions, intercepted credentials and MFA codes in real time, and accessed entire SaaS environments through SSO dashboards.
+
+      Additional campaigns targeted energy companies using SharePoint-themed phishing to steal authenticated session cookies, Fortinet firewalls via recently patched authentication bypass flaws, and software ecosystems through exploitation of known vulnerabilities added to CISA’s KEV catalog.
+
+    affected_organizations:
+      - name: "Food services (Southeast Asia)"
+        impact: "Operational disruption, data theft, ransomware extortion"
+      - name: "Financial services, fintech, crypto"
+        impact: "SSO compromise, data exfiltration, extortion"
+      - name: "Energy sector organizations"
+        impact: "Email takeover, lateral phishing campaigns"
+      - name: "Global enterprises using Fortinet"
+        impact: "Firewall reconfiguration, credential exposure"
+
+    attack_methodology: |
+      Attackers gain access through trusted systems such as identity providers, firewall management interfaces, or software update channels. Once inside, they disable security controls, extract sensitive data, and establish persistence using legitimate administrative features. Encryption or extortion occurs only after data theft is complete.
+
+why_it_matters:
+  business_risks:
+    financial_exposure: |
+      Ransomware claims reached 4,737 victims in 2025. Single incidents have exceeded $50M in combined recovery, legal, and business interruption costs. Identity-based breaches expand impact across all connected SaaS platforms.
+
+    regulatory_compliance: |
+      Exposure implicates data protection laws including GDPR, sectoral regulations for energy and finance, and emerging breach disclosure rules that emphasize timeliness and governance oversight.
+
+    competitive_impact: |
+      Compromise of SaaS platforms and developer environments exposes IP, customer data, and strategic plans, creating long-term competitive disadvantage beyond immediate recovery.
+
+    operational_disruption: |
+      Attacks disrupt identity systems, email, and network infrastructure, delaying recovery and amplifying business downtime even without widespread encryption.
+
+  industry_patterns:
+    affected_sectors:
+      - "Finance"
+      - "Energy"
+      - "Technology"
+      - "Healthcare"
+    
+    trend_analysis: |
+      These incidents represent an accelerating pattern, not isolated events. Attackers increasingly exploit trust relationships and automation to outpace enterprise response cycles.
+
+technical_context:
+  vulnerability_details:
+    cve_identifier: "Multiple (CVE-2025-31125, CVE-2025-34026, CVE-2025-54313, CVE-2025-68645)"
+    vulnerability_type: "Authentication bypass and trusted component abuse"
+    affected_systems: 
+      - "Okta SSO"
+      - "Fortinet FortiGate"
+      - "Microsoft SharePoint"
+    exploitation_status: "Active"
+  
+  attack_indicators:
+    - "Unexpected SSO logins with valid credentials"
+    - "Firewall configuration exports or new admin accounts"
+
+strategic_response:
+  executive_decisions:
+    - priority: "Critical"
+      decision: "Reclassify identity and firewall platforms as Tier-0 business systems"
+      business_justification: "Compromise enables enterprise-wide access"
+      cost_estimate: "$250K–$1M annually"
+    
+    - priority: "High"
+      decision: "Measure detection and containment time, not just prevention"
+      business_justification: "Credential abuse bypasses preventive controls"
+      cost_estimate: "$150K–$500K"
+
+  governance_implications:
+    board_reporting: |
+      Track time-to-detection, identity abuse incidents, and exposure to KEV vulnerabilities.
+    
+    disclosure_requirements: |
+      Timely breach notification obligations may apply once credential misuse is confirmed.
+
+analysis_and_insights:
+  uncomfortable_truths: |
+    Modern security failures are governance failures. Enterprises over-invest in perimeter tools while underestimating trust relationships and response speed.
+
+  strategic_lessons:
+    - "Assume credentials will be compromised"
+    - "Trust must be continuously verified"
+
+forward_outlook:
+  predictions: |
+    Over the next 12 months, attackers will further automate identity abuse and exploit trusted update mechanisms. Enterprises that fail to shift toward detection and containment will experience repeated extortion events.
+
+source_articles:
+  - title: "New Osiris Ransomware Emerges as New Strain Using POORTRY Driver in BYOVD Attack"
+    url: "https://thehackernews.com/2026/01/new-osiris-ransomware-emerges-as-new.html"
+    date: "2026-01-22"
+  - title: "Okta SSO accounts targeted in vishing-based data theft attacks"
+    url: "https://www.bleepingcomputer.com/news/security/okta-sso-accounts-targeted-in-vishing-based-data-theft-attacks/"
+    date: "2026-01-22"
+  - title: "CISA Adds Four Known Exploited Vulnerabilities to Catalog"
+    url: "https://www.cisa.gov/news-events/alerts/2026/01/22/cisa-adds-four-known-exploited-vulnerabilities-catalog"
+    date: "2026-01-22"
+  - title: "Energy sector orgs targeted with AiTM phishing campaign"
+    url: "https://www.helpnetsecurity.com/2026/01/22/energy-sector-aitm-phishing-sharepoint-misuse/"
+    date: "2026-01-22"
+  - title: "Arctic Wolf detects surge in automated Fortinet FortiGate firewall configuration attacks"
+    url: "https://securityaffairs.com/187194/hacking/arctic-wolf-detects-surge-in-automated-fortinet-fortigate-firewall-configuration-attacks.html"
+    date: "2026-01-22"
+
+metadata:
+  author: "Am Dum Dee"
+  last_updated: "2026-01-22"
+  threat_category: ["Identity Abuse", "Ransomware", "Supply Chain"]
+  affected_industries: ["Finance", "Energy", "Technology"]
+  confidence_level: "High"
