@@ -1,0 +1,110 @@
+---
+threat_summary:
+  title: "Industrialization of Supply Chain Poisoning & Endpoint Lobotomization"
+  report_date: "2026-01-23"
+  threat_id: "TI-20260123-CXO"
+  severity_business: "Critical"
+  severity_technical: "Critical"
+  
+  executive_summary: |
+    The final week of January 2026 marks a pivotal shift in adversary tactics. Attackers have successfully 
+    moved 'upstream' into the software supply chain (Vite/Prettier) and 'downstream' into the OS kernel 
+    via BYOVD attacks (Osiris). These developments mean that traditional detection tools (EDR/AV) and 
+    perimeter defenses are being bypassed by design rather than through exploit. Organizations are 
+    currently facing a 'Governance Gap' where digital convenience (SMS links) and developer efficiency 
+    (unvetted AI/npm tools) are creating multi-year liabilities.
+
+threat_intelligence:
+  what_happened:
+    incident_overview: |
+      Five distinct but related threats emerged this week. First, the Osiris ransomware targeted a major 
+      food service franchisee, using the POORTRY driver to disable security software—a 'Bring Your Own 
+      Vulnerable Driver' (BYOVD) attack that renders EDR blind. Simultaneously, CISA flagged that 
+      standard developer tools (Vite, Prettier) are being used as delivery vehicles for malware. 
+      Furthermore, Under Armour is investigating a 72-million record breach, while new research 
+      reveals that SMS-based 'magic links' used for customer convenience remain active and exploitable 
+      for over two years, acting as long-term backdoors into PII.
+    
+    affected_organizations:
+      - name: "Under Armour"
+        impact: "Alleged 72M records exposed; significant brand trust and regulatory scrutiny."
+      - name: "Southeast Asian Food Franchisee"
+        impact: "Total operational stoppage via Osiris ransomware; data exfiltration to Wasabi cloud."
+      - name: "Global Developer Ecosystem"
+        impact: "Active exploitation of Vite and Prettier packages affecting CI/CD pipelines."
+    
+    attack_methodology: |
+      1. Entry: Supply chain compromise via malicious npm/JavaScript packages (Vite/Prettier) 
+         leveraged by developers.
+      2. Disablement: Deployment of POORTRY/BYOVD drivers to terminate security processes (KillAV).
+      3. Persistence/Exfiltration: Use of 'Residential Proxies' and 'Kimwolf' botnets (2M+ devices) 
+         to mask data movement.
+      4. Long-tail Access: Exploitation of unexpired SMS URLs to harvest PII over months or years.
+  
+  why_it_matters:
+    business_risks:
+      financial_exposure: |
+        Direct ransomware costs average $1.5M+, but supply chain remediation for a single 
+        poisoned library can cost mid-sized firms upwards of $500k in engineering hours alone.
+      
+      regulatory_compliance: |
+        CISA BOD 22-01 mandates federal fixes by Feb 12, 2026. Private firms failing to address 
+        these KEV catalog items face extreme liability under 'Reasonable Security' standards.
+      
+      competitive_impact: |
+        The TikTok USDS Joint Venture sets a new bar for 'Algorithm Security' and third-party 
+        auditing. Companies unable to prove similar data sovereignty will lose government contracts.
+      
+      operational_disruption: |
+        Osiris demonstrates the ability to kill Veeam and volume shadow copies, extending 
+        recovery timelines from days to weeks.
+    
+    industry_patterns:
+      affected_sectors:
+        - "Retail & E-commerce (PII Theft)"
+        - "Software Development (Supply Chain)"
+        - "Critical Infrastructure (OT/IoT Botnets)"
+      
+      trend_analysis: |
+        We are moving from 'Exploit-based' attacks to 'Identity and Workflow-based' attacks. 
+        Adversaries are now 'living off the build' rather than 'living off the land.'
+
+technical_context:
+  vulnerability_details:
+    - cve_identifier: "CVE-2025-54313"
+      vulnerability_type: "Embedded Malicious Code in eslint-config-prettier"
+      affected_systems: ["Node.js development environments", "Windows build servers"]
+      exploitation_status: "Active"
+    - cve_identifier: "CVE-2025-31125"
+      vulnerability_type: "Vite Improper Access Control"
+      affected_systems: ["Frontend JS Frameworks"]
+      exploitation_status: "Active"
+  
+  attack_indicators:
+    - "Presence of 'kaz.exe' (Mimikatz variant) or 'POORTRY' drivers in system logs."
+    - "High-volume DNS queries to Kimwolf-related domains (25% of enterprise traffic already shows this)."
+    - "Active connections to Wasabi cloud storage buckets from unauthorized servers."
+
+source_articles:
+  - title: "TikTok Forms U.S. Joint Venture"
+    url: "https://thehackernews.com/2026/01/tiktok-forms-us-joint-venture-to.html"
+    date: "2026-01-23"
+  - title: "Under Armour Investigates Data Breach"
+    url: "https://www.infosecurity-magazine.com/news/under-armour-investigates-data/"
+    date: "2026-01-23"
+  - title: "CISA adds Prettier and Vite to KEV"
+    url: "https://securityaffairs.com/187241/security/u-s-cisa-adds-prettier-eslint-config-prettier-vite-vitejs-versa-concerto-sd-wan-orchestration-platform-and-synacor-zimbra-collaboration-suite-flaws-to-its-known-exploited-vulnerabilities-catal.html"
+    date: "2026-01-23"
+  - title: "Osiris Ransomware BYOVD Attacks"
+    url: "https://thehackernews.com/2026/01/new-osiris-ransomware-emerges-as-new.html"
+    date: "2026-01-22"
+  - title: "SMS Links Expose Data for Years"
+    url: "https://www.helpnetsecurity.com/2026/01/23/sms-private-urls-data-exposure-study/"
+    date: "2026-01-23"
+
+metadata:
+  author: "Am Dum Dee"
+  last_updated: "2026-01-23"
+  threat_category: ["Supply Chain", "Ransomware", "Data Privacy"]
+  affected_industries: ["Technology", "Retail", "Finance"]
+  confidence_level: "High"
