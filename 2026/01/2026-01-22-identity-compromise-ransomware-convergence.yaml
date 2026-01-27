@@ -1,0 +1,235 @@
+# OUTPUT 1: LINKEDIN POST
+
+**Your identity system just became the boardroom's biggest liability.**
+
+Last week, attackers weaponized Okta's SSO platform—the gateway to Salesforce, M365, and every critical business system—through sophisticated voice-based social engineering. They're calling your employees, impersonating IT, and stealing credentials that unlock your entire digital estate. One compromised login equals instant access to customer data, financial records, and intellectual property. Fintech and wealth management firms are already paying extortion demands.
+
+This converges with three other critical exposures: Fortinet firewalls under automated attack creating backdoor VPN access, new Osiris ransomware leveraging kernel-level drivers to disable security tools, and energy sector organizations breached through SharePoint phishing. The pattern? Attackers are bypassing your perimeter defenses and exploiting the human layer—your employees—as the weakest authentication factor.
+
+**The uncomfortable truth:** Your $2M EDR stack is worthless when attackers simply ask employees for credentials. Multi-factor authentication isn't stopping these attacks because threat actors coach victims through the MFA process in real time. TOTP codes and push notifications provide false security when a human voice on the phone says "click approve."
+
+**Strategic decisions required this quarter:**
+
+1. **Emergency SSO audit:** Inventory every platform integrated with your identity provider. One compromised SSO account equals full lateral movement. Budget impact: $150K-$300K for identity security assessment.
+
+2. **Mandate phishing-resistant MFA:** Deploy FIDO2 hardware keys or passkeys for all privileged accounts within 90 days. Push-based MFA is now a compliance risk. Cost: $50-$200 per employee.
+
+3. **Voice-based threat training:** Your security awareness program doesn't cover vishing. Attackers are using spoofed numbers that match your helpdesk. Investment: $100K-$250K annually for realistic social engineering simulations.
+
+4. **Third-party access governance:** Fortinet's automated exploitation cluster shows perimeter devices are under constant automated attack. Require vendor MFA, session monitoring, and 90-day access reviews. Budget: $500K+ for PAM infrastructure.
+
+5. **Incident response retainer:** Ransomware deployment happens within 9 days of initial access. Can your team respond in 72 hours? External IR costs $50K-$500K per incident.
+
+**Here's the question your board should ask Monday:** If an attacker called your CFO's assistant right now claiming to be from IT support, would they successfully steal credentials to your financial systems?
+
+The answer determines your cyber insurance renewal and your regulatory reporting obligations.
+
+#CyberSecurity #IdentitySecurity #RiskManagement #CISO #EnterpriseRisk
+
+---
+
+# OUTPUT 2: GITHUB YAML
+
+**Filename:** 2026-01-22-identity-compromise-ransomware-convergence.yaml
+
+```yaml
+---
+threat_summary:
+  title: "Identity System Compromise and Ransomware Convergence: The $500M+ Enterprise Risk"
+  report_date: "2026-01-22"
+  threat_id: "TI-20260122-001"
+  severity_business: "Critical"
+  severity_technical: "Critical"
+  
+  executive_summary: |
+    Between January 15-22, 2026, security researchers documented four converging threat vectors targeting enterprise identity systems, perimeter defenses, and critical infrastructure. The most severe involves sophisticated voice-based social engineering attacks weaponizing Okta SSO platforms to gain instant access to integrated business systems including Salesforce, Microsoft 365, and financial platforms. Attackers are successfully bypassing multi-factor authentication through real-time coaching during phone calls with employees.
+    
+    Simultaneously, Fortinet FortiGate firewalls—deployed in thousands of enterprise environments—face automated exploitation creating persistent backdoor access. New Osiris ransomware demonstrates advanced evasion using kernel-level drivers to disable security software, while energy sector organizations suffer phishing attacks leveraging legitimate SharePoint infrastructure. CISA added nine actively exploited vulnerabilities to its Known Exploited Vulnerabilities catalog during this period.
+    
+    The convergence creates board-level risk: identity compromise provides immediate lateral movement to revenue-generating systems, perimeter breaches enable persistent access for ransomware deployment (average 9-day timeline from breach to encryption), and social engineering defeats technical controls. Financial exposure ranges from $500K to $50M per incident including extortion payments, regulatory penalties, incident response costs, and business disruption. Fintech, wealth management, financial services, energy, and food service sectors face active targeting.
+
+threat_intelligence:
+  what_happened:
+    incident_overview: |
+      The January 2026 threat landscape demonstrates attackers shifting from exploiting software vulnerabilities to weaponizing business processes and human trust. The most sophisticated campaign involves custom-built phishing kits designed specifically for voice-based social engineering (vishing). Threat actors—potentially including the ShinyHunters extortion group—are calling targeted employees while impersonating company IT support staff. They guide victims to malicious websites that capture both login credentials and multi-factor authentication codes in real time.
+      
+      These attacks target Okta SSO (Single Sign-On) platforms that serve as centralized authentication gateways for enterprise cloud services. Once compromised, a single set of credentials provides immediate access to Microsoft 365, Google Workspace, Salesforce, Slack, Zoom, and other business-critical platforms visible on the victim's Okta dashboard. Attackers prioritize data exfiltration from Salesforce due to its ease of extraction and high-value customer data.
+      
+      Parallel to identity-focused attacks, automated exploitation campaigns target Fortinet FortiGate firewalls using December 2025 authentication bypass vulnerabilities (CVE-2025-59718 and CVE-2025-59719). Attackers create generic administrator accounts, enable VPN access for persistence, and exfiltrate complete firewall configurations containing hashed credentials. This activity shows characteristics of coordinated, automated tooling rather than manual intrusion.
+      
+      In the ransomware domain, new Osiris ransomware deployed against a Southeast Asian food service franchisee demonstrates advanced techniques including BYOVD (Bring Your Own Vulnerable Driver) attacks using the POORTRY malicious driver. The ransomware connects to previous INC ransomware campaigns through shared tools and infrastructure, suggesting operator overlap. Energy sector organizations face adversary-in-the-middle (AiTM) phishing campaigns exploiting SharePoint to distribute credential-stealing pages.
+    
+    affected_organizations:
+      - name: "Fintech and Wealth Management Firms"
+        impact: "Active targeting with successful Okta SSO compromises leading to Salesforce data exfiltration and extortion demands. Financial and reputational damage from customer data exposure."
+      
+      - name: "Southeast Asian Food Service Franchisee"
+        impact: "Osiris ransomware deployment resulting in business disruption, data exfiltration to Wasabi cloud storage, and encryption of operational systems."
+      
+      - name: "Energy Sector Organizations"
+        impact: "Multiple organizations compromised through SharePoint-based AiTM phishing resulting in enterprise account compromise and potential operational technology access."
+      
+      - name: "Fortinet FortiGate Users (Global)"
+        impact: "Automated attacks creating persistent VPN backdoors and credential theft affecting organizations across government, utilities, and healthcare sectors."
+    
+    attack_methodology: |
+      Identity compromise attacks begin with extensive reconnaissance identifying target employees, their roles, applications they access, and legitimate IT support contact numbers. Attackers then develop customized phishing infrastructure naming domains after the target company (e.g., "companyinternal.com" or "mycompany.com"). During phone calls using spoofed caller IDs matching corporate helpdesk numbers, threat actors guide employees to these sites while maintaining a convincing IT support narrative about setting up security features like passkeys.
+      
+      The phishing platforms use real-time control panels allowing attackers to manipulate page content dynamically during calls. As victims enter credentials, these are immediately forwarded to backend systems (often Telegram channels). Attackers simultaneously attempt authentication against real services, triggering MFA challenges. The phishing kit instantly updates to display matching prompts, and the caller directs the victim to enter TOTP codes or approve push notifications. This synchronized attack defeats number-matching MFA because attackers simply tell victims which number to select while the phishing page displays the same prompt.
+      
+      Post-compromise, attackers access the Okta SSO dashboard to inventory available platforms and prioritize high-value targets like Salesforce, which lacks robust audit trails for data export. Data exfiltration occurs within hours, followed by immediate extortion demands threatening public disclosure. In ransomware campaigns, attackers establish persistent access through dual-use tools (Rclone, Netscan, NetExec, MeshAgent), deploy customized remote desktop software, and exfiltrate data before deploying encryption payloads approximately 9 days after initial breach. Advanced ransomware uses kernel drivers to terminate security processes, making detection and prevention significantly harder.
+
+  why_it_matters:
+    business_risks:
+      financial_exposure: |
+        Direct financial impact per incident ranges from $500,000 to $50,000,000 depending on organization size and breach scope. Extortion demands from Okta SSO compromises vary based on stolen data volume and organization revenue. Ransomware payments for Osiris and similar strains average $2-5 million for mid-market organizations, with negotiated amounts typically 30-40% of initial demands. Incident response costs including forensics, legal counsel, and remediation average $750,000-$2,500,000 for identity compromise incidents.
+        
+        Indirect costs include business disruption ($50,000-$500,000 per day for operational downtime), customer notification expenses ($10-$25 per affected customer), credit monitoring services ($100-$200 per customer for 1-2 years), regulatory penalties (GDPR fines up to 4% of global revenue, SEC cyber disclosure violations $500,000-$5,000,000), and cyber insurance premium increases (20-300% upon renewal following claims). Customer churn following data breaches averages 5-8% in financial services with lifetime value losses of $5-50 million depending on client base. Market capitalization typically declines 1-5% following public breach disclosure, recovering over 6-18 months.
+      
+      regulatory_compliance: |
+        Organizations face multiple regulatory exposure points. SEC cybersecurity disclosure rules require Material Incident Reports within 4 business days of determining materiality, with potential penalties for late filing or inadequate disclosure. Financial services organizations must comply with GLBA safeguards, FFIEC guidelines, and state-specific data protection regulations. Healthcare entities handling PHI face HIPAA breach notification requirements within 60 days and OCR investigations potentially resulting in multi-million dollar settlements.
+        
+        GDPR applies to organizations processing EU resident data regardless of headquarters location, with supervisory authorities investigating breach response adequacy. Article 33 requires breach notification within 72 hours of awareness. Recent enforcement actions demonstrate regulators scrutinizing organizations' failure to implement appropriate technical measures including MFA and access controls. State privacy laws (CCPA/CPRA, Colorado Privacy Act, Virginia CDPA) impose notification requirements and right-of-action provisions enabling civil litigation. Payment card industry organizations face PCI DSS compliance validation requirements and potential card brand fines ($5,000-$100,000 per month) for failing to maintain compliant environments.
+      
+      competitive_impact: |
+        Identity compromise incidents directly impact competitive positioning through multiple mechanisms. Intellectual property theft—particularly from Salesforce instances containing product roadmaps, pricing strategies, and customer intelligence—provides competitors immediate strategic advantage. Financial services firms losing customer trust face client migration to competitors offering stronger security postures, accelerating market share erosion.
+        
+        Public breach disclosure triggers customer security questionnaire reviews, potentially disqualifying organizations from enterprise sales opportunities for 12-24 months post-incident. Partnerships and M&A activities stall during investigations as counterparties reassess risk profiles. Organizations in regulated industries face heightened scrutiny during contract renewals, with customers demanding security control evidence, independent audits, and contractual liability provisions. Talent acquisition becomes challenging as security professionals avoid organizations with compromised reputations, while existing staff turnover increases due to stress and reputational concerns.
+      
+      operational_disruption: |
+        Operational impact varies by attack vector but consistently exceeds initial assessments. Okta SSO compromises require immediate credential resets across all integrated platforms, session token revocation, and inbox rule audits—disrupting employee productivity for 2-5 business days. Organizations lacking centralized identity management face extended recovery periods (1-3 weeks) as IT teams manually reset credentials across disparate systems.
+        
+        Ransomware deployment forces complete operational shutdown until systems are rebuilt or decryption occurs. Average recovery timeline spans 21-45 days for full operational restoration even with backups, as organizations must verify system integrity, patch vulnerabilities, and rebuild trust in infrastructure. Manufacturing and critical infrastructure sectors face extended downtime due to operational technology segregation requirements and safety validation protocols. Supply chain partners experience cascading disruptions when primary organizations cannot fulfill orders, process transactions, or maintain communication channels during recovery operations.
+    
+    industry_patterns:
+      affected_sectors:
+        - "Financial Services and Fintech"
+        - "Wealth Management and Investment Firms"
+        - "Energy and Utilities"
+        - "Food Service and Hospitality"
+        - "Healthcare and Life Sciences"
+        - "Government and Public Sector"
+        - "Manufacturing and Supply Chain"
+      
+      trend_analysis: |
+        Attack sophistication shows clear escalation from opportunistic exploitation to targeted, intelligence-driven campaigns. The shift toward identity compromise reflects attackers' recognition that technical controls are improving while human factors remain exploitable. Voice-based social engineering represents the evolution of phishing beyond email-based attacks that increasingly fail against modern detection systems.
+        
+        The convergence of initial access techniques (phishing, vulnerability exploitation) with ransomware deployment indicates professionalization of cybercrime ecosystems. Attackers now operate with clear division of labor: initial access brokers compromise systems, data exfiltration specialists harvest information, and ransomware operators deploy encryption. This assembly-line approach increases attack velocity and success rates. The 9-day average timeline from breach to ransomware deployment observed in Osiris attacks represents industry-standard dwell time designed to maximize damage while minimizing detection probability.
+
+technical_context:
+  vulnerability_details:
+    cve_identifier: "CVE-2025-59718, CVE-2025-59719 (Fortinet), CVE-2025-31125, CVE-2025-34026, CVE-2025-54313, CVE-2025-68645, CVE-2026-21509, CVE-2026-23760, CVE-2026-24061"
+    vulnerability_type: "Authentication bypass vulnerabilities in Fortinet FortiGate allowing SSO authentication circumvention without credentials; Improper access control and authentication issues in enterprise software; Embedded malicious code in development tools; Remote file inclusion and security feature bypass in collaboration and office software"
+    affected_systems:
+      - "Fortinet FortiGate Firewalls (all versions prior to patched releases)"
+      - "Okta SSO Platform (targeted via social engineering, not vulnerability)"
+      - "Vite Vitejs Development Framework"
+      - "Versa Concerto SD-WAN"
+      - "Prettier eslint-config-prettier"
+      - "Synacor Zimbra Collaboration Suite"
+      - "Microsoft Office"
+      - "SmarterTools SmarterMail"
+      - "GNU InetUtils"
+    exploitation_status: "Active exploitation confirmed for all CISA KEV-listed vulnerabilities; Fortinet vulnerabilities under automated attack; Okta SSO targeted through operational campaigns with confirmed victim organizations"
+  
+  attack_indicators:
+    - "Unexpected calls from IT support offering security improvements or requesting credential verification"
+    - "Login attempts from unfamiliar IP addresses (particularly 178.130.46.8, 193.36.221.10 for Okta campaigns)"
+    - "New inbox rules automatically deleting or archiving emails"
+    - "Unusual email traffic patterns including mass deletion of out-of-office and delivery failure notifications"
+    - "New administrator accounts created on perimeter devices with generic names"
+    - "VPN configuration changes enabling external access"
+    - "Firewall configuration exports to external systems"
+    - "Salesforce data export activities outside normal business operations"
+    - "Rclone or similar data transfer utilities connecting to Wasabi, temp.sh, or unusual cloud storage"
+    - "Legitimate remote monitoring tools (SyncFuture TSM, Velociraptor, MeshAgent) deployed without authorization"
+    - "Security software processes terminating unexpectedly"
+    - "Kernel driver loads for non-standard drivers"
+
+strategic_response:
+  executive_decisions:
+    - priority: "Critical"
+      decision: "Mandate phishing-resistant MFA deployment for all privileged accounts and SSO platforms within 90 days. TOTP and push-based MFA are insufficient against voice-guided social engineering attacks."
+      business_justification: "Current MFA implementations provide false security assurance. Attackers are successfully bypassing SMS codes, TOTP, and push notifications through real-time coaching. FIDO2 hardware keys and passkeys prevent credential interception even when users are socially engineered. Cost of deployment ($50-$200 per user) is negligible compared to single compromise incident ($500K-$50M). Regulatory frameworks increasingly recognize phishing-resistant authentication as baseline requirement."
+      cost_estimate: "$150,000-$500,000 for 1,000-employee organization including hardware keys, deployment, and training"
+    
+    - priority: "Critical"
+      decision: "Conduct emergency identity provider (Okta, Azure AD, Google Workspace) access audit. Inventory all integrated applications, review privileged account assignments, validate MFA enrollment, and audit active sessions. Implement session monitoring and anomaly detection."
+      business_justification: "Single compromised SSO account provides instant lateral movement across all integrated business systems. Current visibility into who can access what is likely inadequate. Identity systems have become the new perimeter—breaching them bypasses all downstream security controls. Investment in identity security directly reduces ransomware risk, data exfiltration exposure, and regulatory compliance violations."
+      cost_estimate: "$200,000-$400,000 for comprehensive identity security assessment and initial remediation"
+    
+    - priority: "High"
+      decision: "Implement voice-based social engineering training and testing program. Current security awareness focuses on email phishing; employees lack training for phone-based attacks using spoofed caller IDs and conversational manipulation."
+      business_justification: "Technical controls cannot prevent humans from voluntarily providing credentials during convincing phone conversations. Attackers are successfully impersonating IT support using publicly available information about employee roles and corporate structure. Realistic vishing simulations improve detection rates 40-60% within 6 months. Cost-benefit strongly favors training investment over post-breach remediation."
+      cost_estimate: "$100,000-$250,000 annually for enterprise vishing simulation platform and quarterly campaign execution"
+    
+    - priority: "High"
+      decision: "Establish 24/7 incident response retainer with external cybersecurity firm specializing in identity compromise and ransomware. Internal teams lack capacity and specialization for sophisticated attacks; response time determines breach cost."
+      business_justification: "Average dwell time between initial compromise and ransomware deployment is 9 days. Organizations detecting and responding within 72 hours significantly reduce exfiltration volume and prevent encryption. External IR firms provide immediate surge capacity, specialized forensic tools, and negotiation expertise. Retainer fees ($50K-$150K annually) ensure priority response and reduce hourly rates during incidents (from $400-$800/hour to $250-$500/hour)."
+      cost_estimate: "$50,000-$150,000 annual retainer plus $250-$500 per hour during active incidents"
+    
+    - priority: "High"
+      decision: "Accelerate vulnerability patching for perimeter devices (firewalls, VPNs, email gateways) to 72-hour cycle for critical vulnerabilities. Fortinet exploitation demonstrates attackers weaponize vulnerabilities within days of public disclosure."
+      business_justification: "Perimeter devices under automated attack provide persistent access enabling ransomware deployment. Organizations maintaining monthly patch cycles face weeks-long exposure windows. Critical vulnerabilities in internet-facing infrastructure require emergency patching regardless of change control processes. Cost of emergency patches ($50K-$150K in overtime and change acceleration) is minimal compared to breach costs."
+      cost_estimate: "$200,000-$400,000 annually for enhanced patch management processes and emergency response capability"
+
+  governance_implications:
+    board_reporting: |
+      Boards require specific metrics demonstrating security control effectiveness rather than activity reports. Recommended reporting framework: (1) Identity Compromise Risk Score: percentage of privileged accounts using phishing-resistant MFA, average time-to-detect unauthorized access attempts, number of active sessions monitored continuously. (2) Mean Time to Detect (MTTD) and Mean Time to Respond (MTTR) for security incidents trending quarterly. Target: MTTD <1 hour for identity compromise, MTTR <4 hours for containment. (3) Vulnerability Exposure Window: average days between vulnerability disclosure and patch deployment for critical internet-facing systems. Target: <72 hours for CISA KEV vulnerabilities. (4) Social Engineering Test Results: percentage of employees reporting vishing attempts vs. compliance rate, trending over time. (5) Financial Risk Exposure: calculated potential loss from single incident based on current controls, updated quarterly following control improvements.
+      
+      Boards should receive immediate notification when: (1) Privileged account compromise detected regardless of immediate impact, (2) Perimeter device compromise confirmed, (3) Ransomware indicators observed even without deployment, (4) Data exfiltration detected to unusual destinations, (5) CISA KEV vulnerabilities identified in organization's environment. Quarterly board materials should contextualize internal metrics against industry benchmarks and explain material changes in risk posture.
+    
+    disclosure_requirements: |
+      Organizations must evaluate materiality determination processes following identity compromise incidents. SEC guidance defines materiality as information reasonable investors would consider important in making investment decisions. Factors include: data volume and sensitivity, number of affected customers, potential regulatory penalties, business disruption duration, and reputational impact. Legal counsel should participate in materiality assessments within 24-48 hours of incident confirmation.
+      
+      Material incidents require Form 8-K Item 1.05 filing within 4 business days of materiality determination (with potential 30-day delay upon Attorney General written determination of national security or public safety risk). Organizations should prepare incident response procedures including: evidence preservation requirements, forensic investigation scope, legal hold implementation, customer notification planning, regulatory agency coordination (SEC, state AGs, OCR, FTC), and public disclosure timing. Pre-drafted disclosure templates reduce response time pressure while ensuring accuracy. Customer notification timing varies by state law (immediate to 90 days) and regulation (GDPR 72 hours, HIPAA 60 days). Notification costs alone can exceed $1,000,000 for breaches affecting 100,000+ individuals when including legal review, call center operations, credit monitoring, and regulatory correspondence.
+
+analysis_and_insights:
+  uncomfortable_truths: |
+    Enterprise security investments are misallocated. Organizations spend millions on EDR, SIEM, and perimeter defense while neglecting identity security fundamentals and employee resilience against social engineering. The attacks described succeed not because of technical sophistication but because attackers recognize employees will voluntarily provide credentials when asked by convincing authority figures. Multi-factor authentication creates compliance checkboxes and false assurance while failing to prevent credential theft during guided attacks.
+    
+    The uncomfortable reality: attackers don't need to defeat your $2 million security stack when they can simply call your employees and ask for access. Voice-based social engineering succeeds because humans are programmed to help, comply with authority, and trust caller ID. Organizations treating security awareness as annual checkbox training rather than continuous behavioral change programs will continue experiencing breaches regardless of technical control investment.
+    
+    Second uncomfortable truth: identity providers have become single points of catastrophic failure. Okta, Azure AD, and Google Workspace provide convenient centralized authentication, but their compromise provides instant access to entire digital estates. The convenience of SSO creates concentrated risk that attackers recognize and exploit. Organizations must acknowledge this architectural vulnerability and implement compensating controls: session monitoring, geographic restriction, application-specific MFA requirements, and continuous authentication rather than single sign-on trust.
+  
+  strategic_lessons:
+    - "Identity systems are the new perimeter. Investments should prioritize identity security over perimeter defense. Compromising one SSO account bypasses all downstream security controls."
+    - "Humans remain the weakest authentication factor. Technical controls cannot prevent employees from voluntarily providing credentials. Behavioral training and phishing-resistant authentication are complementary requirements."
+    - "Speed of response determines breach cost. Organizations detecting and containing identity compromise within 24 hours prevent data exfiltration and ransomware deployment. Incident response capability is business continuity investment."
+    - "Vendor security claims require validation. Multi-factor authentication sounds secure but offers no protection against real-time social engineering attacks. CISO teams must independently assess control effectiveness."
+    - "Automation favors attackers. Fortinet exploitation demonstrates attackers deploying automated tools creating persistent access at scale. Defenders must match automation with automated detection and response capabilities."
+
+forward_outlook:
+  predictions: |
+    Voice-based social engineering attacks will intensify through 2026 as attackers refine techniques and target additional identity providers beyond Okta. Expect campaigns targeting Azure AD, Google Workspace, and Duo Security using similar real-time manipulation approaches. AI-powered voice cloning will enable more convincing impersonation of specific IT staff members, making attacks harder to detect through verbal cues. Organizations will face increasing pressure to deploy phishing-resistant authentication as cyber insurance providers mandate FIDO2 implementation as coverage requirement.
+    
+    Ransomware operations will continue professionalizing with clearer specialization between initial access, data exfiltration, and encryption phases. Expect ransomware-as-a-service platforms offering identity compromise capabilities similar to Stanley's Chrome extension MaaS. Attackers will increasingly leverage legitimate enterprise tools (RMM platforms, cloud storage, collaboration software) to evade detection, blending malicious activity with normal business operations. The identity-to-ransomware pipeline will shorten below current 9-day average as attackers optimize automation and playbooks. Organizations detecting compromise after ransomware deployment rather than during initial access phase will face significantly higher costs and longer recovery timelines.
+
+source_articles:
+  - title: "New Osiris Ransomware Emerges as New Strain Using POORTRY Driver in BYOVD Attack"
+    url: "https://thehackernews.com/2026/01/new-osiris-ransomware-emerges-as-new.html"
+    date: "2026-01-22"
+  
+  - title: "Okta SSO accounts targeted in vishing-based data theft attacks"
+    url: "https://www.bleepingcomputer.com/news/security/okta-sso-accounts-targeted-in-vishing-based-data-theft-attacks/"
+    date: "2026-01-22"
+  
+  - title: "CISA Adds Four Known Exploited Vulnerabilities to Catalog"
+    url: "https://www.cisa.gov/news-events/alerts/2026/01/22/cisa-adds-four-known-exploited-vulnerabilities-catalog"
+    date: "2026-01-22"
+  
+  - title: "Energy sector orgs targeted with AiTM phishing campaign"
+    url: "https://www.helpnetsecurity.com/2026/01/22/energy-sector-aitm-phishing-sharepoint-misuse/"
+    date: "2026-01-22"
+  
+  - title: "Arctic Wolf detects surge in automated Fortinet FortiGate firewall configuration attacks"
+    url: "https://securityaffairs.com/187194/hacking/arctic-wolf-detects-surge-in-automated-fortinet-fortigate-firewall-configuration-attacks.html"
+    date: "2026-01-22"
+
+metadata:
+  author: "Am Dum Dee"
+  last_updated: "2026-01-22"
+  threat_category: ["Identity Compromise", "Social Engineering", "Ransomware", "Vulnerability Exploitation"]
+  affected_industries: ["Financial Services", "Fintech", "Wealth Management", "Energy", "Utilities", "Food Service", "Healthcare", "Government", "Manufacturing"]
+  confidence_level: "High"
+```
