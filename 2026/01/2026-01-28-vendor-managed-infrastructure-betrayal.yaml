@@ -1,0 +1,203 @@
+---
+threat_summary:
+  title: "Vendor-Managed Infrastructure as Attack Vector: FortiGate Zero-Day and Browser Extension Surveillance"
+  report_date: "2026-01-28"
+  threat_id: "TI-20260128-001"
+  severity_business: "Critical"
+  severity_technical: "Critical"
+  
+  executive_summary: |
+    On January 28, 2026, Fortinet disclosed CVE-2026-24858, a critical zero-day vulnerability (CVSS 9.4) exploited in the wild since at least January 20. The flaw allowed attackers with basic FortiCloud accounts to bypass authentication and gain administrative access to any FortiGate firewall with cloud SSO enabled. Two malicious FortiCloud accounts (cloud-noc@mail.io and cloud-init@mail.io) compromised multiple organizations before Fortinet locked them out on January 22. Active exploitation involved creating persistent admin accounts, granting VPN access, exfiltrating firewall configurations containing network topology and credentials, and establishing long-term backdoor access. Federal agencies received 48-hour remediation deadlines from CISA. This incident follows CVE-2025-59718, a previous FortiGate authentication bypass exploited in December 2025.
+    
+    Simultaneously, research from Incogni analyzing 442 AI-powered Chrome extensions revealed widespread privacy and security risks in widely-deployed productivity tools. Grammarly and QuillBot—extensions with millions of users—ranked as the most potentially privacy-damaging tools due to extensive data collection and broad browser permissions. 52% of analyzed extensions collected user data including personal communications, location, and website content. Many required scripting permissions allowing code injection into web pages and activeTab permissions providing access to everything users view or type. These permissions create persistent surveillance capabilities and potential backdoors when extensions change ownership or are compromised.
+    
+    The convergence of vendor-managed infrastructure vulnerabilities and browser extension surveillance represents a fundamental challenge to enterprise security architectures built on vendor trust assumptions. Organizations face threat scenarios where security appliances become attack vectors and productivity tools function as data exfiltration channels. The ETSI TS 104 008 specification for continuous auditing of AI systems addresses part of this challenge by treating change as expected and building assessment processes around ongoing measurement rather than periodic reviews. However, the broader issue requires rethinking vendor trust models and cloud-managed infrastructure dependencies.
+
+threat_intelligence:
+  what_happened:
+    incident_overview: |
+      Between January 20-28, 2026, Fortinet customers discovered unauthorized administrative access to their FortiGate firewalls despite running current software versions. Initial speculation suggested inadequate patching of CVE-2025-59718, a December 2025 authentication bypass vulnerability. Fortinet's investigation revealed a separate zero-day vulnerability, CVE-2026-24858, being actively exploited through FortiCloud's cloud-managed SSO feature. The vulnerability allowed attackers with legitimate FortiCloud accounts to authenticate to FortiGate devices registered to completely different accounts without requiring passwords or other credentials from the target organizations.
+      
+      Two malicious FortiCloud accounts executed attacks against multiple organizations. The attack methodology involved creating local administrator accounts on compromised firewalls for persistence, modifying firewall configurations to enable VPN access for these accounts, and exfiltrating complete device configurations containing network architecture, VPN credentials, LDAP/Active Directory integration details, and security policies. This granted attackers both immediate administrative control and long-term backdoor access through newly-created VPN accounts. Fortinet locked the malicious accounts on January 22 but exploitation continued through January 26 when Fortinet disabled FortiCloud SSO entirely across all customer devices. The feature was re-enabled January 27 with blocks preventing vulnerable device versions from authenticating.
+      
+      Parallel research on browser extension security revealed that AI-powered productivity tools widely deployed across enterprises create extensive surveillance and security exposure. Analysis of 442 Chrome extensions found that 52% collected user data, with many requiring permissions enabling them to read all typed content, view all visited websites, and inject arbitrary code into web pages. Grammarly and QuillBot—tools commonly approved for employee use—ranked highest for privacy impact due to collecting personal communications, website content, and user activity data while requiring scripting and activeTab permissions providing complete visibility into browser activity.
+      
+      The browser extension risk extends beyond declared data collection. Scripting permissions allow extensions to modify web pages and capture input in real-time. When extensions change ownership, update code, or become compromised, these permissions create backdoor access to corporate web applications, cloud platforms, email systems, and internal portals. Security research found that programming and mathematical helper extensions posed highest average risk, often operating in sensitive environments like code repositories, cloud notebooks, and learning platforms with access to proprietary code and embedded credentials. Meeting assistants and audio transcribers ranked second, operating during live meetings where sensitive conversations, shared screens, and internal documents are common.
+    
+    affected_organizations:
+      - name: "FortiGate Firewall Customers (All Industries)"
+        impact: "Complete administrative compromise of perimeter security infrastructure, VPN backdoor creation, network configuration and credential exfiltration"
+      
+      - name: "Federal Civilian Executive Branch Agencies"
+        impact: "48-hour remediation mandate from CISA; potential BOD 22-01 compliance violations if deadlines not met"
+      
+      - name: "Organizations Using Grammarly/QuillBot (Enterprises, Education, Government)"
+        impact: "Persistent surveillance of employee communications, website activity, and typed content across business applications"
+      
+      - name: "Software Development Organizations"
+        impact: "Chrome extension access to proprietary code, credentials in scripts, cloud development environments, and unpublished research"
+    
+    attack_methodology: |
+      FortiGate SSO Bypass: Attackers obtained legitimate FortiCloud accounts (likely through account purchase or compromise of existing accounts). They exploited CVE-2026-24858 to authenticate to FortiGate devices registered to other organizations by abusing an alternate authentication path in the SSO implementation. Once authenticated with administrative privileges, attackers created local admin accounts ensuring persistence independent of the FortiCloud authentication mechanism. Configuration changes enabled VPN access for these accounts, allowing remote network access even after the initial vulnerability was patched. Complete device configurations were exfiltrated, providing attackers with network topology maps, security policies, encryption keys, and integration credentials for connected identity systems like Active Directory and LDAP.
+      
+      The attack required only that target organizations had enabled FortiCloud SSO authentication, a feature not enabled by default but commonly activated when administrators register devices to FortiCare from the device GUI. Organizations unaware this registration process enabled cloud-based authentication created unintended attack surface. The vendor-controlled nature of the authentication meant traditional security controls (network segmentation, access control lists, authentication logs) provided no visibility or prevention capability. Attacks originated from Fortinet's legitimate authentication infrastructure, making them indistinguishable from normal administrative access until attackers began making configuration changes.
+      
+      Browser Extension Surveillance: Employees install productivity extensions believing they are adopting approved tools for writing assistance, translation, or meeting support. Installation prompts request permissions in technical language that obscures actual capabilities. "Read and change all your data on all websites" becomes normalized as necessary for functionality. Once installed, extensions operate continuously across all browser tabs and websites. Scripting permissions enable real-time capture of keystrokes, form inputs, and page content. ActiveTab permissions provide access to everything displayed in the current tab including credentials, confidential documents, financial information, and internal communications.
+      
+      The risk escalates when extensions change ownership, as permissions persist across ownership transfers. New owners gain complete access to existing user base surveillance capabilities. Security teams lack visibility into extension behavior as activity occurs within browser processes rather than network traffic. Cloud platform access through browser sessions means extensions capture SSO tokens, API keys, and session cookies providing access to business systems. Extensions processing content locally can exfiltrate data without generating network traffic signatures that security monitoring would detect.
+
+  why_it_matters:
+    business_risks:
+      financial_exposure: |
+        FortiGate compromise represents complete perimeter security failure with costs far exceeding typical breach scenarios. Organizations face immediate incident response expenses ($500K-$2M), forensic investigation of all devices on compromised networks, mandatory notification of potentially affected parties, and regulatory penalties for inadequate security controls. Federal agencies missing CISA's 48-hour deadline face potential BOD 22-01 violation consequences including oversight intensification and budget restrictions. Organizations with cyber insurance may face coverage denials as vendor-managed infrastructure compromise challenges policy assumptions about reasonable security controls.
+        
+        Configuration exfiltration enables sophisticated follow-on attacks. Attackers possess complete network architecture documentation, VPN credentials, Active Directory integration details, and security policy information. This intelligence supports targeted attacks against internal systems worth orders of magnitude more than initial firewall compromise. VPN backdoors created through new admin accounts provide persistent access enabling data theft, ransomware deployment, or industrial espionage over extended periods. Organizations may operate with undetected attacker access for months before discovery, with dwell time directly correlating to damage magnitude.
+        
+        Browser extension surveillance creates unquantifiable data loss exposure. Extensions monitoring employee communications capture customer data, financial information, strategic plans, competitive intelligence, and personally identifiable information across all web applications. Organizations using Grammarly or QuillBot for business writing unknowingly transmitted potentially privileged communications, attorney-client protected content, and trade secrets to third-party processors. Legal discovery in litigation could reveal that organizations lacked control over confidential information, undermining privilege claims and creating disclosure obligations. Regulatory examination of data handling practices would reveal that organizations cannot account for where employee-generated content went or how it was processed.
+      
+      regulatory_compliance: |
+        CISA added CVE-2026-24858 to the Known Exploited Vulnerabilities catalog with January 30, 2026 remediation deadline for federal agencies. Agencies failing to meet this deadline face BOD 22-01 enforcement actions. Private sector organizations in critical infrastructure sectors face CISA advisory pressure and potential regulatory attention if breaches occur through known exploited vulnerabilities. SEC cybersecurity disclosure rules require material incident reporting within four business days; organizations discovering active exploitation must assess disclosure obligations immediately.
+        
+        GDPR Article 32 requires "appropriate technical and organizational measures" ensuring security appropriate to risk. Organizations using FortiCloud SSO with known vulnerability exposure face Article 83 penalties up to €10M or 2% of global turnover for inadequate security measures, plus Article 33 breach notification requirements if compromise led to data exposure. State privacy laws (CPRA, Virginia CDPA, Colorado CPA) impose security requirements and breach notification obligations. Organizations unable to demonstrate reasonable security practices face statutory damages and private right of action exposure.
+        
+        Browser extension data collection without proper consent and legal basis creates GDPR compliance violations. Extensions collecting personal communications, location data, and browsing activity require informed consent under Article 7. Organizations deploying these extensions without documented data processing agreements and legitimate interest assessments violate controller obligations. Data subjects have deletion rights, access rights, and portability rights that organizations cannot fulfill when data resides with extension vendors lacking proper data processing agreements. Supervisory authorities examining data protection practices would discover uncontrolled data flows and inadequate vendor management.
+      
+      competitive_impact: |
+        Organizations advertising zero-trust architecture or security-first positioning while experiencing firewall authentication bypass face credibility destruction. Customers evaluating vendor security posture will discover that vendor-managed features in security infrastructure created uncontrolled access. Competitive bid processes increasingly include security questionnaires requiring disclosure of prior incidents; FortiGate compromise creates multi-year disclosure obligations affecting win rates. Partners conducting security assessments before integration or M&A transactions will identify vendor trust architecture as material weakness, impacting deal valuation or requiring extensive remediation as closing condition.
+        
+        Browser extension surveillance enables competitor intelligence gathering if employees use corporate accounts for extensions. Writing assistance tools analyzing strategic documents, competitive positioning papers, and proposal content provide extension vendors with insight into organizational strategy. Organizations competing against well-funded adversaries must consider whether competitors have relationships with extension vendors or access to aggregated data that reveals competitive intelligence. The asymmetry created when some organizations restrict extension use while competitors allow unrestricted installation creates information advantages that manifest in market positioning, pricing strategies, and customer acquisition tactics.
+      
+      operational_disruption: |
+        Fortinet's remediation guidance requires organizations to treat affected devices as fully compromised, restore configurations from known clean versions, and rotate all credentials including connected LDAP/Active Directory accounts. This creates multi-day operational impact as organizations take firewalls offline for remediation, rebuild configurations, coordinate credential rotation across identity systems, and validate network security before returning to production. Organizations without clean configuration backups must rebuild firewall policies from documentation or memory, extending downtime to weeks.
+        
+        VPN backdoor accounts created by attackers require investigation to identify what internal resources were accessed and what data was exfiltrated. This forensic investigation extends incident response timelines and may reveal additional compromises requiring separate remediation efforts. Organizations must assume that all systems accessible via VPN were compromised until forensic analysis proves otherwise, expanding investigation scope dramatically.
+        
+        Browser extension remediation requires organizational policy changes, user communication, extension removal across all employee devices, and deployment of approved alternatives. This creates productivity disruption as employees lose familiar tools and must adapt to alternatives with different functionality. Resistance to security-driven tool restrictions creates change management challenges requiring executive sponsorship and sustained communication. Organizations maintaining productivity during transition may need to deploy MDM solutions for browser management, creating additional implementation timelines and costs.
+    
+    industry_patterns:
+      affected_sectors:
+        - "All Industries Using FortiGate (Healthcare, Finance, Manufacturing, Government, Education, Technology)"
+        - "Federal Government (CISA mandate)"
+        - "Enterprises Using AI-Powered Browser Extensions"
+        - "Software Development Organizations"
+        - "Professional Services (Legal, Consulting, Advisory)"
+      
+      trend_analysis: |
+        The FortiGate zero-day represents the second critical authentication bypass in Fortinet products within 45 days, indicating either inadequate security review of authentication mechanisms or fundamental architectural vulnerabilities in cloud-managed features. Organizations selecting security vendors based on market share and feature sets must reassess whether market leadership correlates with security quality. The pattern suggests that cloud-managed security infrastructure creates vendor-controlled attack surface that organizations cannot monitor or control, fundamentally challenging cloud security advantages marketed by vendors.
+        
+        Browser extension security risks are accelerating as AI-powered tools proliferate. The "as a service" model for AI features requires internet connectivity and cloud processing, creating data exfiltration requirements as part of normal functionality. Users cannot distinguish between legitimate cloud processing and surveillance because both require identical permissions and data access. Organizations face escalating challenge maintaining productivity tool access while preventing uncontrolled data exposure. The trend toward AI assistants embedded in all productivity tools means this problem intensifies rather than stabilizes.
+        
+        Regulatory pressure on AI system governance is increasing, with ETSI TS 104 008 specification for continuous auditing representing industry recognition that periodic reviews cannot keep pace with AI system changes. Organizations deploying AI tools face growing expectation that they maintain ongoing assurance of system behavior rather than point-in-time certification. This creates operational burden requiring automation and investment in governance infrastructure. Organizations treating AI tool adoption as isolated procurement decisions without governance frameworks face mounting compliance risk as regulatory requirements mature.
+
+technical_context:
+  vulnerability_details:
+    cve_identifier: "CVE-2026-24858"
+    vulnerability_type: "Authentication bypass allowing attackers with FortiCloud accounts to access other organizations' FortiGate devices without proper credentials when cloud SSO is enabled"
+    affected_systems:
+      - "FortiOS (all versions prior to 7.4.11 and other forthcoming patched versions)"
+      - "FortiManager (vulnerable versions, patches forthcoming)"
+      - "FortiAnalyzer (vulnerable versions, patches forthcoming)"
+      - "Potentially FortiWeb and FortiSwitch Manager (under investigation)"
+    exploitation_status: "Active exploitation confirmed in the wild since January 20, 2026; two malicious FortiCloud accounts locked out January 22, 2026"
+  
+  attack_indicators:
+    - "Creation of unexpected local administrator accounts on FortiGate devices with generic or unfamiliar names"
+    - "Configuration changes enabling VPN access or modifying VPN policies without authorized change tickets"
+    - "Firewall configuration downloads or exports outside scheduled backup windows"
+    - "SSO authentication events from cloud-noc@mail.io or cloud-init@mail.io accounts"
+    - "Authentication events from IP addresses associated with known malicious infrastructure"
+    - "Browser extension installations without IT approval, especially AI-powered writing or meeting tools"
+    - "Extension requests for broad permissions including 'read and change data on all websites' or scripting access"
+    - "Unusual network traffic from browser processes to third-party analytics or data processing endpoints"
+    - "Employee reports of unexpected extension behavior or prompts for additional permissions"
+    - "Extensions changing ownership or updating privacy policies to expand data collection"
+
+strategic_response:
+  executive_decisions:
+    - priority: "Critical"
+      decision: "Immediately inventory all vendor-managed security infrastructure with cloud authentication features; assess which vendors can remotely access devices and establish monitoring for vendor-initiated actions"
+      business_justification: "Organizations cannot secure what they cannot see. Vendor-managed features create attack surface outside organizational control. Without inventory and monitoring, organizations lack situational awareness of their actual security posture and cannot detect compromise through legitimate vendor channels. FortiGate incident demonstrates that vendor authentication mechanisms can become attack vectors invisible to traditional security monitoring."
+      cost_estimate: "$200,000-$500,000 (inventory audit, monitoring infrastructure deployment, process development)"
+    
+    - priority: "Critical"
+      decision: "Implement browser extension governance policy requiring security review before installation; deploy MDM for browser management with approved extension allowlists and periodic permission audits"
+      business_justification: "Uncontrolled browser extension deployment creates unmonitored data exfiltration channels. Extensions with millions of users collecting personal communications and website content represent persistent surveillance in business applications. Cost of governance framework is negligible compared to data loss, regulatory penalties, and competitive intelligence exposure from unrestricted extension use."
+      cost_estimate: "$300,000-$800,000 (policy development, MDM deployment, security review process, user communication and training)"
+    
+    - priority: "High"
+      decision: "Require contractual liability provisions for vendor-side vulnerabilities in managed security services; negotiate indemnification clauses for breaches resulting from vendor authentication bypass"
+      business_justification: "Current vendor agreements place all breach liability on customers regardless of whether vulnerability originated in vendor-managed infrastructure. This creates misaligned incentives where vendors face no financial consequences for security failures in their cloud platforms. Contracts should reflect that vendors creating cloud-managed features bear responsibility for securing those features. Organizations paying for security services should not absorb full financial impact of vendor security failures."
+      cost_estimate: "$100,000-$300,000 (legal review, contract negotiation, vendor relationship management)"
+    
+    - priority: "High"
+      decision: "Deploy continuous auditing framework for AI systems processing business data; implement automated evidence collection and conformity assessment per ETSI TS 104 008 specification"
+      business_justification: "AI systems change continuously through model updates, data pipeline modifications, and configuration changes. Periodic security reviews provide point-in-time assurance that becomes obsolete as systems evolve. Continuous auditing treats change as expected and maintains ongoing assurance through automated measurement. Regulatory requirements are moving toward continuous compliance expectations; organizations building governance infrastructure now avoid later crisis-driven implementation at higher cost."
+      cost_estimate: "$500,000-$1,500,000 (framework implementation, automation tooling, integration with AI systems, staffing for governance function)"
+    
+    - priority: "High"
+      decision: "Establish vendor security review board with authority to approve/reject vendor-managed features; require vendors to demonstrate detection capabilities for their own infrastructure compromise"
+      business_justification: "Organizations currently evaluate vendor security through questionnaires and certifications that don't address vendor-managed feature risks. Security review should assess whether vendors can detect when their own infrastructure is compromised and used against customers. Vendors unable to demonstrate detection capabilities for authentication bypass in their own platforms should not be trusted with cloud-managed security features. Board-level oversight ensures vendor selections consider full risk profile rather than just feature sets."
+      cost_estimate: "$250,000-$500,000 annually (board operation, vendor assessments, technical reviews, governance overhead)"
+
+  governance_implications:
+    board_reporting: |
+      Boards must receive quarterly reporting on vendor-managed infrastructure inventory, cloud authentication feature deployment across security stack, and monitoring coverage for vendor-initiated actions. Metrics should include percentage of security infrastructure with cloud management, number of vendors with remote access capabilities, detection coverage for vendor authentication events, and time to detect unauthorized vendor-initiated changes. These metrics enable board oversight of concentration risk in vendor relationships and architectural dependencies creating single points of failure.
+      
+      Browser extension governance metrics for board reporting include percentage of employee browsers under management, number of unapproved extensions detected and removed, extension permission audit results, and data processing agreement coverage for approved extensions. Boards should understand organizational capability to control what productivity tools employees install and what data those tools can access. Gap between policy requirements and actual compliance reveals governance effectiveness or lack thereof.
+      
+      AI system continuous auditing metrics include percentage of AI systems under continuous assessment, conformity status for systems in production, time from nonconformity detection to remediation, and audit evidence completeness. As regulatory requirements mature around AI governance, boards need visibility into organizational preparedness and capability to demonstrate compliance with evolving standards.
+    
+    disclosure_requirements: |
+      Organizations experiencing FortiGate compromise through CVE-2026-24858 must assess SEC disclosure obligations under cybersecurity incident rules. Material incidents require reporting within four business days. Materiality assessment considers data accessed through compromised firewalls, duration of attacker access via VPN backdoors, and potential impact on business operations or financial condition. Legal counsel should evaluate disclosure obligations immediately upon confirming exploitation.
+      
+      GDPR breach notification obligations arise if compromise led to unauthorized access to personal data. Article 33 requires notification to supervisory authorities within 72 hours unless breach is unlikely to result in risk to data subject rights. Organizations must document breach assessment and notification decisions. State breach notification laws impose varying notification requirements and timelines requiring multi-jurisdictional compliance analysis.
+      
+      Federal agencies face mandatory reporting to CISA for known exploited vulnerabilities under BOD 22-01. Critical infrastructure organizations should report significant cyber incidents to CISA through 24-hour reporting requirement under CIRCIA when implemented. Failure to report when required creates regulatory enforcement risk separate from underlying incident.
+
+analysis_and_insights:
+  uncomfortable_truths: |
+    Enterprise security architecture rests on vendor trust assumptions that this incident proves are unjustified. Organizations delegate authentication authority to vendor-managed cloud platforms assuming vendors implement security controls protecting customer environments from vendor-side compromise. The FortiGate zero-day demonstrates that vendors can create architectural vulnerabilities in their cloud platforms that bypass all customer-implemented security controls. When authentication happens in vendor infrastructure, organizations have no visibility, no control, and no detection capability until attackers begin making configuration changes using legitimately-obtained administrative access.
+    
+    The "cloud managed" features marketed as operational improvements and cost savings create attack surface that organizations cannot monitor or secure. Traditional security models assume threats originate externally and security controls at the perimeter detect and prevent intrusion. Cloud-managed features make vendor infrastructure part of the perimeter, and vendor compromise becomes indistinguishable from legitimate vendor access. Organizations cannot firewall cloud management features without disabling functionality they purchased. This architectural dependency means that vendor security failures become customer security failures regardless of how well customers implement their own controls.
+    
+    Browser extension security represents a parallel failure in trust assumptions. Organizations focused security investment on network monitoring, endpoint detection, and identity management while employees installed persistent surveillance tools marketed as productivity enhancements. Extensions requesting permission to "read and change all your data on all websites" should trigger extreme scrutiny, but these permission requests are normalized through poor UX design and user habituation. Organizations treating browser security as user responsibility rather than enterprise control problem have unmanaged data exfiltration channels operating continuously. The productivity benefits of AI-powered writing assistance do not justify surrendering visibility and control over what employees type and view across all business applications.
+
+  strategic_lessons:
+    - "Vendor-managed features in security infrastructure create uncontrolled attack surface requiring dedicated monitoring and governance rather than trust-based delegation"
+    - "Cloud authentication systems operated by vendors require assumption that vendor compromise equals customer compromise; architectural decisions should consider this risk explicitly"
+    - "Multiple critical vulnerabilities in same vendor product line within 45 days indicates systematic rather than isolated security problems requiring reevaluation of vendor trust"
+    - "Browser extension security cannot be solved through user awareness; enterprise controls and MDM deployment are necessary to prevent uncontrolled data exposure"
+    - "Productivity tool selection must include data flow analysis and vendor data processing agreement review rather than treating installations as individual user decisions"
+    - "AI system governance requires continuous auditing rather than periodic certification because systems change faster than review cycles"
+    - "Security controls that create operational friction face organizational resistance regardless of risk justification; executive sponsorship is prerequisite for effective implementation"
+    - "Contractual liability provisions in vendor agreements must reflect that vendors creating cloud features bear responsibility for securing those features appropriately"
+
+forward_outlook:
+  predictions: |
+    Vendor-managed security infrastructure will face increased scrutiny throughout 2026 as organizations recognize that cloud management features create dependencies on vendor security practices. Expect security vendor RFPs to include specific requirements for vendor infrastructure security, detection capabilities for vendor-side compromise, and contractual liability provisions. Vendors unable to demonstrate appropriate security controls for their cloud management platforms will face competitive disadvantage. Organizations may begin moving away from cloud-managed security features toward on-premises management despite operational disadvantages, valuing control over convenience.
+    
+    Browser extension security will become enterprise IT control issue rather than user responsibility. MDM deployment for browser management will accelerate as organizations recognize that uncontrolled extension installation creates unmanaged data exfiltration channels. Expect enterprise policy shifts toward approved extension allowlists with prohibited defaults. AI-powered productivity tools requiring broad permissions and cloud processing will face enterprise adoption barriers. Vendors offering local processing and minimal permission requirements will gain competitive advantages. Regulatory attention to browser extension data collection practices may follow as privacy advocates highlight surveillance capabilities in widely-used tools.
+
+source_articles:
+  - title: "Fortinet starts patching exploited FortiCloud SSO zero-day (CVE-2026-24858)"
+    url: "https://www.helpnetsecurity.com/2026/01/28/fortinet-forticloud-sso-zero-day-vulnerability-cve-2026-24858/"
+    date: "2026-01-28"
+  
+  - title: "Grammarly and QuillBot are among widely used Chrome extensions facing serious privacy questions"
+    url: "https://www.helpnetsecurity.com/2026/01/28/incogni-chrome-extensions-privacy-risks-report/"
+    date: "2026-01-28"
+  
+  - title: "Audits for AI systems that keep changing"
+    url: "https://www.helpnetsecurity.com/2026/01/28/etsi-ts-104-008-ai-continuous-auditing/"
+    date: "2026-01-28"
+  
+  - title: "Fortinet Patches CVE-2026-24858 After Active FortiOS SSO Exploitation Detected"
+    url: "https://thehackernews.com/2026/01/fortinet-patches-cve-2026-24858-after.html"
+    date: "2026-01-28"
+
+metadata:
+  author: "Am Dum Dee"
+  last_updated: "2026-01-28"
+  threat_category: ["Vendor Risk", "Authentication Bypass", "Privacy Risk", "AI Governance", "Zero-Day"]
+  affected_industries: ["All Industries", "Federal Government", "Healthcare", "Finance", "Manufacturing", "Technology", "Professional Services"]
+  confidence_level: "High"
