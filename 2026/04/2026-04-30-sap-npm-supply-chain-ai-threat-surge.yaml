@@ -1,0 +1,368 @@
+---
+threat_summary:
+  title: "SAP Enterprise Supply Chain Poisoned: Developer Pipelines
+    Become Credential Harvesting Infrastructure"
+  report_date: "2026-04-30"
+  threat_id: "TI-20260430-001"
+  severity_business: "Critical"
+  severity_technical: "Critical"
+
+  executive_summary: |
+    On April 29, 2026, four official SAP npm packages used across
+    enterprise development teams were silently weaponized. Attackers
+    inserted credential-stealing malware that executed automatically
+    during routine software installation — requiring zero action from
+    developers beyond their normal workflow. Cloud credentials for AWS,
+    Azure, and Google Cloud, plus GitHub tokens, SSH keys, browser
+    passwords, and CI/CD pipeline secrets were harvested and exfiltrated
+    before most teams were aware.
+
+    This is not a theoretical risk. Over 1,100 GitHub repositories
+    were already created as exfiltration endpoints at the time of
+    discovery. The attack is attributed with medium confidence to
+    TeamPCP, a threat actor with a documented pattern of enterprise
+    supply chain compromises. The same group has previously targeted
+    Bitwarden, Checkmarx, and Trivy.
+
+    The time-sensitivity is extreme. Organizations running SAP CAP
+    or Cloud MTA development environments that executed npm installs
+    between 09:55 UTC and 12:14 UTC on April 29 should treat all
+    developer credentials and associated cloud environments as
+    compromised until verified otherwise.
+
+threat_intelligence:
+  what_happened:
+    incident_overview: |
+      Attackers gained access to the publishing credentials for four
+      SAP npm packages and released malicious versions within a
+      two-hour window. The packages — used daily by enterprise
+      development teams building on SAP's Cloud Application Programming
+      Model — were modified to include a hidden installation script.
+      Any developer or automated build system that installed these
+      versions triggered the malware silently.
+
+      The malware downloaded a secondary payload from GitHub, executed
+      it using a legitimate JavaScript runtime, and began harvesting
+      every credential it could find on the machine and in the build
+      environment. It then encrypted the stolen data and uploaded it
+      to GitHub repositories created under the victim's own account —
+      making outbound traffic appear legitimate and extremely difficult
+      to block or trace.
+
+      The attack also self-propagated: using the stolen tokens, it
+      injected malicious code into the victim's own repositories and
+      published poisoned versions of their npm packages, turning each
+      victim into an unwitting distribution point for the next wave.
+      AI coding tools including Claude Code and VS Code were explicitly
+      targeted as persistence vectors — a documented first in supply
+      chain attack history.
+
+      Root cause analysis revealed the attackers exploited a
+      misconfigured npm OIDC trusted publishing policy that allowed
+      any workflow branch — not just the sanctioned release branch —
+      to exchange a token and publish packages. A single configuration
+      gap became the entry point for a campaign affecting thousands
+      of enterprise environments.
+
+    affected_organizations:
+      - name: "SAP Enterprise Development Ecosystem"
+        impact: "Four official packages deprecated; developer and
+          CI/CD credentials across all consuming organizations
+          potentially harvested"
+      - name: "Any enterprise running SAP CAP or Cloud MTA"
+        impact: "Cloud environment credentials, CI/CD secrets, and
+          browser-stored passwords exposed; self-propagation risk
+          to downstream packages"
+      - name: "Open Source / SaaS Development Teams"
+        impact: "Poisoned package propagation means secondary victims
+          may include organizations not directly using SAP packages"
+
+    attack_methodology: |
+      Entry was achieved by compromising a contributor account and
+      exploiting a misconfigured publishing policy that did not
+      restrict which code branches could release packages. Once
+      inside, the attackers modified the package installation process
+      to silently download and run malware the moment a developer
+      typed a standard install command.
+
+      The malware harvested credentials from developer machines,
+      cloud environments, and live CI/CD pipeline memory — bypassing
+      log masking entirely. All stolen data was encrypted with
+      military-grade encryption before leaving the machine, ensuring
+      only the attacker can read it. Exfiltration used GitHub as
+      the delivery channel, making it indistinguishable from normal
+      development traffic.
+
+      The operation then used stolen credentials to inject itself
+      into victims' own codebases and package releases, creating
+      a self-sustaining distribution network. Persistence was
+      embedded directly into AI coding agent configuration files,
+      ensuring malware re-executed every time an infected repository
+      was opened.
+
+  why_it_matters:
+    business_risks:
+      financial_exposure: |
+        Direct costs include cloud infrastructure abuse using stolen
+        credentials (unauthorized compute, storage, data transfer),
+        incident response and forensic investigation (typically
+        $500K–$2M for enterprise-scale events), and credential
+        rotation across all affected systems. Indirect costs include
+        regulatory fines under GDPR (up to 4% of global revenue),
+        SOX audit failures if financial system credentials were
+        exposed, and potential customer notification obligations.
+        Downstream propagation means liability may extend beyond
+        the initially infected organization to customers and partners
+        who received poisoned package updates.
+
+      regulatory_compliance: |
+        GDPR requires notification within 72 hours if personal data
+        was accessible via compromised credentials. SOX Section 404
+        implications arise if CI/CD pipelines touch financial
+        reporting systems. HIPAA exposure exists for healthcare
+        organizations with developer access to protected environments.
+        SEC disclosure rules may apply for publicly traded companies
+        if the breach is material. The self-propagating nature of
+        this attack complicates scope determination required for
+        accurate regulatory filings.
+
+      competitive_impact: |
+        Organizations confirmed as breach victims face developer
+        trust erosion — a critical competitive factor in talent
+        markets. If proprietary source code or unreleased product
+        features were accessible through stolen repository tokens,
+        intellectual property loss is a direct competitive risk.
+        Companies that respond visibly and quickly can convert the
+        incident into a trust signal; those that are slow or silent
+        face lasting reputational damage with enterprise customers
+        who conduct vendor security reviews.
+
+      operational_disruption: |
+        Immediate operational impact includes mandatory rotation of
+        all developer, cloud, and CI/CD credentials — a process that
+        can take days to weeks in large organizations and halts
+        deployment pipelines in the interim. Any repository that
+        installed the affected packages must be audited for injected
+        malicious workflows before releases resume. Organizations
+        that unknowingly published poisoned versions of their own
+        packages face additional remediation obligations to their
+        downstream users.
+
+    industry_patterns:
+      affected_sectors:
+        - "Enterprise Software Development (SAP ecosystem)"
+        - "Financial Services (SAP-dependent ERP environments)"
+        - "Manufacturing and Logistics"
+        - "Cloud-Native SaaS Development"
+        - "Any organization with active npm-based CI/CD pipelines"
+
+      trend_analysis: |
+        This is the fourth documented TeamPCP supply chain operation
+        in recent months, following attacks on Trivy, Checkmarx, and
+        Bitwarden. The pattern shows deliberate escalation: each
+        campaign adds new credential sources, improves evasion, and
+        expands propagation capability. The targeting of AI coding
+        agent configurations as persistence vectors represents a
+        new frontier — attackers are now mapping and weaponizing
+        the modern developer toolchain in its entirety.
+
+        The use of GitHub as command-and-control infrastructure is
+        now standard practice for this threat actor. Blocking it
+        is operationally impossible for development organizations.
+        This structural dependency on a trusted platform is being
+        systematically exploited and shows no signs of abating.
+
+technical_context:
+  vulnerability_details:
+    cve_identifier: "N/A — Supply chain compromise, no single CVE"
+    vulnerability_type: "Malicious package publication via compromised
+      contributor account and misconfigured OIDC trusted publishing
+      policy; credential harvesting via preinstall script execution"
+    affected_systems:
+      - "@cap-js/sqlite v2.2.2 (safe: v2.3.0, v2.4.0)"
+      - "@cap-js/postgres v2.2.2 (safe: v2.3.0)"
+      - "@cap-js/db-service v2.10.1 (safe: v2.10.1 re-release)"
+      - "mbt v1.2.48 (safe: v1.2.49)"
+      - "Any CI/CD runner that installed affected versions"
+      - "Developer machines with npm access April 29 09:55–12:14 UTC"
+    exploitation_status: "Active — confirmed malicious versions
+      published and distributed; self-propagation observed in wild"
+
+  attack_indicators:
+    - "GitHub repositories appearing in developer accounts with
+      description 'A Mini Shai-Hulud has Appeared'"
+    - "Unexpected .claude/settings.json files in repositories
+      not intentionally using Claude Code"
+    - "Unexpected .vscode/tasks.json with runOn: folderOpen entries
+      not placed by development team"
+    - "Unexplained npm or GitHub token activity following April 29
+      package installs"
+    - "New GitHub Actions workflows on non-main branches not
+      created by known team members"
+    - "Cloud provider alerts for credential use from unexpected
+      geographic locations or IP ranges"
+
+strategic_response:
+  executive_decisions:
+    - priority: "Critical"
+      decision: "Initiate emergency credential rotation for all
+        developers and CI/CD systems that ran npm installs on or
+        after April 29, 2026"
+      business_justification: "Stolen credentials provide ongoing
+        access to cloud environments, source code, and customer
+        data until rotated. Every hour of delay extends attacker
+        dwell time and potential damage."
+      cost_estimate: "$50K–$500K in engineering time depending on
+        organization size; substantially less than breach remediation"
+
+    - priority: "Critical"
+      decision: "Audit all repositories accessible by affected
+        developer accounts for injected malicious workflows before
+        resuming production deployments"
+      business_justification: "Self-propagation means your own
+        packages may now be poisoning your customers. Shipping
+        compromised code to clients creates contractual and legal
+        liability beyond the initial incident."
+      cost_estimate: "$100K–$1M depending on repository count
+        and required forensic depth"
+
+    - priority: "High"
+      decision: "Commission a software supply chain risk assessment
+        covering all package registries used in development pipelines"
+      business_justification: "This is the fourth attack of this
+        type in months. Without systematic visibility into dependency
+        provenance, the next incident is a question of when, not if.
+        Current vendor risk frameworks do not cover this exposure."
+      cost_estimate: "$200K–$800K for enterprise-scale assessment
+        and tooling implementation"
+
+    - priority: "High"
+      decision: "Establish board-level reporting metrics for
+        open-source dependency risk as a standing agenda item"
+      business_justification: "Regulatory scrutiny of software
+        supply chain security is increasing. SEC, EU CRA, and
+        emerging US CISA guidance all point toward executive
+        accountability for this risk category. Getting ahead of
+        it now is cheaper than responding to a regulator inquiry."
+      cost_estimate: "Governance cost only — no new tooling required
+        in initial phase"
+
+  governance_implications:
+    board_reporting: |
+      Recommended metrics for quarterly board reporting: number of
+      unvetted third-party packages in production pipelines; mean
+      time to detect and rotate compromised developer credentials;
+      percentage of CI/CD pipelines with secrets scanning enabled;
+      count of repositories with enforced branch protection and
+      publishing policies. For this specific incident, report on
+      exposure window, confirmed scope of credential compromise,
+      and deployment pipeline status.
+
+    disclosure_requirements: |
+      Organizations with confirmed credential exposure should engage
+      legal counsel immediately on GDPR 72-hour notification clock,
+      SEC materiality assessment for publicly traded entities, and
+      customer contract notification obligations where source code
+      or shared infrastructure credentials were accessible. The
+      self-propagating nature of the attack may require disclosure
+      to downstream package consumers even where the organization
+      itself was not the primary target.
+
+analysis_and_insights:
+  uncomfortable_truths: |
+    Most enterprise security programs were not built to protect
+    the software factory — they were built to protect the software
+    output. Firewalls, DLP, endpoint detection: all focused on
+    what leaves the building, not what gets injected during build.
+    Attackers have noticed. The developer workstation and the CI/CD
+    pipeline are now the highest-value, lowest-defended targets in
+    the enterprise.
+
+    The open-source dependency model is a structural liability that
+    the industry has collectively decided to accept without pricing
+    in the risk. Every `npm install` is an implicit trust decision
+    made by a developer under time pressure, with no board visibility
+    and no risk framework. This is not a technology problem. It is
+    a governance gap that has been monetized by adversaries.
+
+    Separately, this week also saw AI models identify 271 zero-day
+    vulnerabilities in Firefox — a hardened, security-focused
+    codebase. The same AI capability being deployed defensively
+    will be used offensively. Organizations that are not actively
+    investing in AI-assisted security discovery are already behind.
+    The asymmetry is real, and it is accelerating.
+
+  strategic_lessons:
+    - "Package registry publishing policies are a security control
+      requiring the same rigor as production access management —
+      this incident turned on a single misconfigured OIDC policy"
+    - "GitHub as C2 infrastructure is now standard — blocking it
+      is impossible, so detection must move to behavioral analysis
+      of what your own tokens are doing, not just what traffic
+      leaves the network"
+    - "AI coding agent configuration files are now an attack
+      surface requiring inclusion in security baseline standards"
+    - "Self-propagating supply chain attacks mean your incident
+      scope extends to everyone who consumes your packages —
+      third-party breach notification obligations are no longer
+      just about your vendors"
+
+forward_outlook:
+  predictions: |
+    Over the next 6–12 months, supply chain attacks will continue
+    shifting from opportunistic to targeted. The TeamPCP pattern
+    shows deliberate capability building — each campaign more
+    sophisticated than the last, with better evasion, broader
+    credential scope, and smarter persistence. Enterprise-grade
+    package ecosystems (SAP, Salesforce, ServiceNow, Workday
+    adjacent tooling) will be increasingly targeted because they
+    offer access to large, high-value downstream environments
+    through a single compromise point.
+
+    AI-assisted vulnerability discovery will become a competitive
+    differentiator for security teams — but also a force multiplier
+    for attackers who can automate package analysis and identify
+    publishable exploit windows faster than human defenders can
+    review them. Organizations that invest now in AI-augmented
+    dependency monitoring and automated credential hygiene will
+    build a durable advantage. Those that do not will face escalating
+    incident frequency with shrinking response windows.
+
+source_articles:
+  - title: "SAP-Related npm Packages Compromised in Credential-Stealing
+      Supply Chain Attack"
+    url: "https://thehackernews.com/2026/04/sap-related-npm-packages-compromised-in.html"
+    date: "2026-04-29"
+
+  - title: "Official SAP npm packages compromised to steal credentials"
+    url: "https://www.bleepingcomputer.com/news/security/official-sap-npm-packages-compromised-to-steal-credentials/"
+    date: "2026-04-29"
+
+  - title: "Claude Mythos Has Found 271 Zero-Days in Firefox"
+    url: "https://blog.mozilla.org/security/2026/04/claude-mythos-271-zero-days-firefox/"
+    date: "2026-04-29"
+
+  - title: "OpenAI Technical Goals"
+    url: "https://openai.com/index/openai-technical-goals/"
+    date: "2026-04-29"
+
+  - title: "Police bust scam call centres behind €50 million in
+      fraud losses"
+    url: "https://www.bleepingcomputer.com/news/security/police-bust-scam-call-centres-behind-50-million-in-fraud-losses/"
+    date: "2026-04-29"
+
+metadata:
+  author: "Am Dum Dee"
+  last_updated: "2026-04-30"
+  threat_category:
+    - "Supply Chain Attack"
+    - "Credential Theft"
+    - "CI/CD Pipeline Compromise"
+    - "AI Toolchain Exploitation"
+  affected_industries:
+    - "Enterprise Software"
+    - "Financial Services"
+    - "Manufacturing"
+    - "Cloud-Native Development"
+    - "Any npm-dependent Development Organization"
+  confidence_level: "High"
