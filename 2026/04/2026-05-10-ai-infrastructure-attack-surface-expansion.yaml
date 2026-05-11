@@ -1,8 +1,8 @@
 ---
 threat_summary:
   title: "AI Infrastructure Becomes Primary Attack Surface: Memory Leaks, Malvertising, and Supply Chain Compromise in One Week"
-  report_date: "2026-05-11"
-  threat_id: "TI-20260511-001"
+  report_date: "2026-05-10"
+  threat_id: "TI-20260510-001"
   severity_business: "Critical"
   severity_technical: "Critical"
 
