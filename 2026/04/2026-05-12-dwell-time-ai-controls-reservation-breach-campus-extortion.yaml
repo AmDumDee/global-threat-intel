@@ -1,0 +1,441 @@
+---
+threat_summary:
+  title: "Six-Month Hotel Breach, Campus Extortion, and AI Controls That
+    Don't Work: The Dwell Time Crisis Boards Aren't Measuring"
+  report_date: "2026-05-12"
+  threat_id: "TI-20260512-001"
+  severity_business: "Critical"
+  severity_technical: "Critical"
+
+  executive_summary: |
+    BWH Hotels disclosed that an attacker had continuous access to guest
+    reservation data — names, contacts, addresses, stay details — across
+    its entire hotel portfolio for over six months before detection. The
+    breach ran from October 2025 through April 2026 across 4,000+ hotels
+    in 100+ countries. No payment data was involved, but the scope of
+    behavioral and contact data exposure enables targeted fraud and
+    phishing at scale against an undisclosed number of guests.
+
+    ShinyHunters breached Instructure's Canvas learning platform twice
+    within seven days, stealing 280 million student records from 8,809
+    institutions. After Instructure declined to negotiate, attackers
+    defaced university login portals during final exams, forcing
+    cancellations across 11 states. Congress has summoned Instructure
+    executives to testify by May 21. Instructure subsequently reached
+    an undisclosed agreement with the group to halt the leak.
+
+    A researcher also confirmed that Amazon QuickSight's AI chat agents
+    ignored administrator disable controls for months — the restriction
+    worked in the interface but not against direct API calls, meaning
+    organizations that believed they had blocked AI usage had not.
+    Simultaneously, Microsoft disclosed 16 Windows vulnerabilities
+    discovered by its own AI scanning system, including four critical
+    remote code execution flaws reachable without credentials —
+    signaling that AI-assisted vulnerability discovery is now
+    operational on both sides of the security equation.
+
+threat_intelligence:
+  what_happened:
+    incident_overview: |
+      BWH Hotels' six-month breach is a textbook dwell-time failure.
+      An unauthorized party accessed a guest reservation web application
+      from October 14, 2025 through April 22, 2026 — 190 days — before
+      the company detected the intrusion. The exposed data included guest
+      names, email addresses, phone numbers, home addresses, reservation
+      numbers, dates of stay, and special requests. No payment data was
+      stored in the affected system. The breach affects guests across
+      Best Western Hotels & Resorts, WorldHotels, and Sure Hotels.
+      No threat group has claimed responsibility.
+
+      The Instructure Canvas breach represents a different failure mode:
+      rapid, repeated compromise by a known extortion group, followed
+      by operational disruption used as negotiation leverage. ShinyHunters
+      breached Canvas, stole 280 million records, and when Instructure
+      declined to negotiate, returned within days to deface login portals
+      at schools and universities during final exam periods. The disruption
+      forced exam cancellations and drew Congressional scrutiny. Instructure
+      subsequently reached an agreement — the terms undisclosed — that
+      resulted in ShinyHunters removing the company from its leak site
+      and claiming data deletion.
+
+      The Amazon QuickSight authorization bypass illustrates a third
+      category: security controls that administrators believe are enforced
+      but functionally are not. An organization that explicitly disabled
+      AI chat agents via the only available mechanism — custom permission
+      profiles — remained exposed because the enforcement existed only
+      in the UI layer, not the API layer. AWS classified the severity as
+      "none" and issued no customer notification, despite the control
+      being the sole mechanism available to restrict AI feature access
+      within QuickSight accounts.
+
+      Microsoft's disclosure of 16 Windows vulnerabilities found by its
+      own AI scanning system — including four critical remote code
+      execution flaws in the Windows networking stack reachable without
+      credentials — represents the defensive side of the same AI
+      capability being weaponized offensively. The implication for
+      boards: the organizations that deploy AI vulnerability discovery
+      defensively will find and patch their own flaws before attackers
+      do. Those that don't will face attackers using equivalent tools
+      against unpatched systems.
+
+    affected_organizations:
+      - name: "BWH Hotels guests (Best Western, WorldHotels, Sure Hotels)"
+        impact: "Contact details and stay data exposed for 190 days,
+          enabling targeted phishing, fraud, and social engineering
+          against an undisclosed number of guests globally"
+      - name: "Instructure Canvas customers — 8,809 institutions"
+        impact: "280 million student records stolen; login portal
+          defacement disrupted final exams across 11 US states;
+          Congressional testimony required; reputational and
+          contractual exposure across higher education sector"
+      - name: "Organizations using Amazon QuickSight with AI disabled"
+        impact: "Believed AI chat agents were blocked; controls were
+          unenforceable via API for months; compliance attestations
+          relying on those controls may be inaccurate"
+      - name: "Windows environments with internet-exposed networking
+          services"
+        impact: "Four critical unauthenticated remote code execution
+          vulnerabilities in Windows TCP/IP stack and IKEv2 service,
+          now patched but requiring urgent deployment"
+
+    attack_methodology: |
+      BWH's breach exploited long-term persistent access to a web
+      application with guest data — likely via compromised credentials
+      or an unpatched application vulnerability. The 190-day window
+      suggests the access method was low-noise enough to avoid triggering
+      behavioral alerts, and that no regular access audit or anomaly
+      detection was validating legitimate versus unauthorized activity
+      in the system.
+
+      ShinyHunters used cross-site scripting vulnerabilities in Canvas
+      to obtain authenticated administrator sessions — effectively
+      stealing the keys to the platform by exploiting input validation
+      flaws. This granted full administrative access to modify login
+      portals and access student data. The second attack, used for
+      extortion leverage, demonstrated operational capability to disrupt
+      services, not just exfiltrate data.
+
+      The Amazon QuickSight bypass required only a direct HTTP API
+      call — no sophisticated exploit, no credential theft. The
+      attacker (or unauthorized internal user) simply bypassed the
+      UI that enforced restrictions by calling the backend directly.
+      This is a governance and architecture failure, not a technical
+      exploit in the traditional sense.
+
+  why_it_matters:
+    business_risks:
+      financial_exposure: |
+        BWH's guest data exposure enables phishing and fraud campaigns
+        targeting hotel guests with booking-specific social engineering —
+        fake payment requests, fraudulent reservation changes, targeted
+        vishing. Class action exposure for hospitality companies following
+        reservation breaches has ranged from $5M to $50M depending on
+        scope. Instructure's undisclosed settlement with ShinyHunters,
+        combined with likely mandatory breach notifications to 8,809
+        institutions and individual students, represents multi-million
+        dollar remediation cost plus ongoing regulatory scrutiny.
+        Congressional testimony creates reputational and potential
+        legislative exposure. Amazon QuickSight compliance failures
+        could invalidate audit attestations, triggering contract
+        reviews with enterprise customers who required AI usage controls.
+
+      regulatory_compliance: |
+        BWH's 190-day dwell time creates state breach notification
+        obligations across every jurisdiction where affected guests
+        reside — potentially dozens of US states plus GDPR for
+        European guests, each with different notification timelines
+        and content requirements. Instructure faces FERPA obligations
+        for student data exposure, state education privacy laws, and
+        SEC disclosure requirements as a public company. Organizations
+        that relied on Amazon QuickSight custom permissions to enforce
+        AI usage restrictions for SOC 2, ISO 27001, or internal policy
+        compliance should reassess whether those attestations remain
+        valid for the affected period.
+
+      competitive_impact: |
+        For BWH, a six-month breach across a globally recognized
+        hospitality brand damages traveler trust at the moment of
+        booking consideration — guests choosing between hotel networks
+        will factor data protection reputation. For Instructure,
+        Congressional scrutiny and a double breach within one week
+        creates contract renewal risk across the higher education
+        sector. Competitors will use the incident in sales cycles.
+        For any organization relying on cloud vendor security controls
+        without independent verification, the QuickSight case
+        illustrates that vendor assurances require testing.
+
+      operational_disruption: |
+        Canvas login portal defacement during final exams forced
+        actual exam cancellations — a direct, measurable academic
+        and operational impact on institutions. Recovery required
+        taking affected systems offline, engaging external forensics,
+        and coordinating breach notification across thousands of
+        institutions simultaneously. BWH took its reservation
+        application offline upon discovery, disrupting reservation
+        management operations during investigation. The operational
+        pattern — attackers escalating to service disruption when
+        initial extortion is declined — is becoming standard practice.
+
+    industry_patterns:
+      affected_sectors:
+        - "Hospitality and Travel"
+        - "Education Technology"
+        - "Cloud Services and SaaS"
+        - "Any sector using Amazon QuickSight for BI and AI"
+        - "Windows-dependent enterprise environments"
+
+      trend_analysis: |
+        The 190-day BWH dwell time is not an outlier — it aligns with
+        industry averages that have remained stubbornly above 150 days
+        for years despite significant security investment. The pattern
+        reflects a structural gap: most security programs are optimized
+        for perimeter defense and incident response, not continuous
+        behavioral monitoring that would detect persistent low-noise
+        access. Attackers have adapted their techniques to stay below
+        detection thresholds precisely because dwell time is valuable.
+
+        ShinyHunters' escalation from data theft to operational
+        disruption — defacing portals, cancelling exams, drawing
+        Congressional attention — reflects a maturing extortion
+        playbook that treats operational impact as leverage when
+        financial negotiation stalls. This pattern will expand to
+        other sectors. The Amazon QuickSight case reflects a broader
+        trend of AI features shipping faster than security controls
+        are validated, creating governance gaps that compliance teams
+        discover only after the fact.
+
+technical_context:
+  vulnerability_details:
+    cve_identifier: "CVE-2026-45185 (Exim Dead.Letter); CVE-2026-33827,
+      CVE-2026-33824, CVE-2026-41089, CVE-2026-41096 (Windows Critical
+      RCE); CWE-862 (Amazon QuickSight missing server-side authorization)"
+    vulnerability_type: "Long-term unauthorized application access via
+      persistent low-noise intrusion (BWH); cross-site scripting enabling
+      admin session hijack (Canvas); UI-only authorization enforcement
+      bypassable via direct API call (QuickSight); memory corruption
+      enabling unauthenticated remote code execution (Windows/Exim)"
+    affected_systems:
+      - "BWH Hotels guest reservation web application"
+      - "Instructure Canvas LMS (XSS in login portal)"
+      - "Amazon QuickSight Chat Agent API (pre-March 12 fix)"
+      - "Exim MTA with GnuTLS builds below version 4.99.3"
+      - "Windows tcpip.sys, ikeext.dll, netlogon.dll, dnsapi.dll"
+    exploitation_status: "BWH: Confirmed active exploitation (190 days).
+      Canvas: Confirmed active exploitation by ShinyHunters. QuickSight:
+      Patched March 12; exploitation window closed but compliance impact
+      remains. Exim CVE-2026-45185: No active exploitation confirmed,
+      PoC-level details published. Windows CVEs: Patched May 2026
+      Patch Tuesday, no confirmed exploitation."
+
+  attack_indicators:
+    - "Reservation or guest data system queries outside business hours
+      from service accounts or IPs without operational justification"
+    - "Administrative session tokens for SaaS platforms appearing from
+      unexpected geographic locations or devices"
+    - "AI chat agent API calls succeeding in cloud environments where
+      AI features were believed to be administratively disabled"
+    - "Login portal content modifications in SaaS platforms not
+      attributable to authorized change management records"
+    - "Exim mail server running GnuTLS builds below version 4.99.3
+      accepting BDAT connections from external senders"
+
+strategic_response:
+  executive_decisions:
+    - priority: "Critical"
+      decision: "Establish dwell time as a board-reported security metric.
+        Define maximum acceptable unauthorized access duration for each
+        critical data system. Commission a detection coverage audit to
+        determine whether behavioral anomalies in reservation, student,
+        customer, or financial data systems would trigger alerts within
+        that threshold."
+      business_justification: "BWH's attacker had 190 days of access.
+        The industry average exceeds 150 days. If your security program
+        cannot detect persistent low-noise access to data systems, you
+        have response capability but not detection capability. The
+        difference is measured in how much data leaves before you know."
+      cost_estimate: "Detection coverage audit: $30K-$80K. Behavioral
+        monitoring tooling for critical applications: $50K-$200K annually.
+        Six-month breach response and notification: $2M-$20M depending
+        on scope."
+
+    - priority: "Critical"
+      decision: "Require independent verification of cloud vendor security
+        controls — specifically AI feature restrictions, access controls,
+        and data processing boundaries — before relying on them for
+        compliance attestations. Do not accept vendor assurance alone;
+        test controls against direct API access, not just UI behavior."
+      business_justification: "Amazon rated its QuickSight authorization
+        bypass as 'none' severity and notified no customers. Organizations
+        that relied on that control for compliance purposes have a gap
+        they may not know about. Cloud vendor severity ratings protect
+        vendor reputation, not customer compliance posture. Independent
+        testing is the only reliable verification."
+      cost_estimate: "Cloud control verification testing: $15K-$50K
+        per major platform annually. Compliance gap remediation if
+        discovered during audit: $100K-$500K plus potential contract
+        penalties."
+
+    - priority: "High"
+      decision: "Develop and board-approve a ransomware and extortion
+        negotiation policy before an incident occurs. Define payment
+        decision authority, legal counsel engagement triggers, law
+        enforcement notification obligations, and public disclosure
+        thresholds. Instructure's undisclosed agreement with ShinyHunters
+        drew Congressional scrutiny — your policy should anticipate
+        that outcome."
+      business_justification: "Extortion groups are escalating to
+        operational disruption — service outages, public defacement,
+        Congressional attention — when initial demands are declined.
+        Deciding negotiation policy during a crisis, under operational
+        pressure and media attention, produces worse outcomes than
+        deciding it in advance. This is a board decision, not a
+        security team decision."
+      cost_estimate: "Policy development with legal counsel: $20K-$60K.
+        Crisis decision-making without policy: Estimated $500K-$5M
+        in additional costs from delayed, inconsistent response."
+
+    - priority: "High"
+      decision: "Inventory all AI features auto-provisioned by cloud
+        vendors across your environment. Verify which are active,
+        which were believed to be disabled, and whether those
+        restrictions were enforced at the API layer or only the UI.
+        Assess compliance impact of any gap period."
+      business_justification: "Amazon automatically provisions AI
+        chat agents in QuickSight on activation. Organizations that
+        wanted AI disabled had one control mechanism — which did not
+        work for months. The same pattern likely exists across other
+        cloud AI services that ship features by default. You cannot
+        govern AI you do not know is running."
+      cost_estimate: "AI feature inventory and verification: $10K-$30K.
+        Compliance remediation if gaps found: $50K-$200K depending
+        on regulatory obligations."
+
+  governance_implications:
+    board_reporting: |
+      Add to quarterly board security reporting: (1) Dwell time
+      benchmark — maximum days of undetected access in last quarter
+      across critical data systems. (2) AI feature inventory status —
+      count of cloud AI capabilities active vs. approved vs. verified
+      as restricted. (3) Extortion incident preparedness — policy
+      existence and last tabletop exercise date. (4) Control
+      verification coverage — percentage of compliance-relied-upon
+      controls independently tested vs. vendor-attested only.
+      (5) Critical Windows/infrastructure patch deployment velocity
+      against Patch Tuesday disclosure dates.
+
+    disclosure_requirements: |
+      BWH's 190-day breach triggers multi-jurisdictional notification
+      obligations: GDPR 72-hour requirement applies to EU guest data
+      (likely breached given timeline); US state laws vary from
+      immediate to 45-day notification windows. Instructure's SEC
+      8-K obligations apply as a public company; Congressional
+      testimony creates additional disclosure precedent. Organizations
+      with QuickSight AI control gaps should consult legal counsel
+      on whether SOC 2 or ISO 27001 attestations covering the
+      affected period require qualification or customer notification.
+
+analysis_and_insights:
+  uncomfortable_truths: |
+    The BWH breach lasted 190 days not because the attacker was
+    sophisticated, but because nobody was looking. Most enterprise
+    security budgets are heavily weighted toward prevention and
+    perimeter controls. Detection — specifically behavioral monitoring
+    of data access patterns inside applications — receives a fraction
+    of that investment, despite being the control that determines
+    how long an attacker stays once they're in. Boards that approve
+    multi-million dollar firewall and endpoint investments while
+    their reservation systems run without access anomaly detection
+    are optimizing for the wrong threat model.
+
+    The Amazon QuickSight case should permanently change how security
+    and compliance teams validate cloud controls. "The vendor says
+    the control is enforced" is not an audit finding — it is a
+    vendor representation. The gap between UI enforcement and API
+    enforcement is a known class of cloud authorization failure,
+    and it exists across multiple providers and services. Every
+    compliance control that relies on a cloud vendor's feature
+    restriction should have an independent test verifying that
+    restriction holds against direct API access, not just the
+    administrative console.
+
+  strategic_lessons:
+    - "Dwell time is the most important security metric most boards
+      never see — make it visible and set acceptable thresholds
+      before a breach makes the conversation reactive"
+    - "Extortion groups now treat operational disruption as a
+      negotiation tool, not just a threat — boards need pre-approved
+      negotiation policy before the crisis, not during it"
+    - "Cloud vendor security controls require independent API-level
+      verification; UI enforcement and API enforcement are not
+      the same thing and vendors may not proactively disclose
+      the difference"
+    - "AI vulnerability discovery is now operational on both sides —
+      organizations deploying AI scanning defensively will find
+      their own critical flaws before attackers do; those that
+      don't will face AI-assisted attackers against unpatched systems"
+
+forward_outlook:
+  predictions: |
+    Extortion escalation to operational disruption will become
+    standard practice within 12 months. ShinyHunters' Canvas
+    playbook — steal data, demand payment, deface services when
+    refused, draw regulatory attention — is replicable against
+    any SaaS platform with student, patient, customer, or financial
+    data and insufficient XSS or authentication controls. Expect
+    this pattern to expand into healthcare scheduling systems,
+    financial services portals, and government service platforms
+    where operational disruption carries maximum leverage. The
+    Congressional response to Canvas sets a precedent that
+    extortion attacks on critical services will attract legislative
+    scrutiny, raising the reputational stakes for affected vendors.
+
+    The gap between AI feature deployment speed and security
+    control validation will widen before it narrows. Cloud providers
+    are shipping AI capabilities as default-on features to drive
+    adoption, and authorization logic is consistently lagging
+    behind feature availability. The QuickSight bypass will not
+    be the last case of its kind. Compliance teams that do not
+    establish independent control verification processes will
+    accumulate attestation gaps across their cloud AI estate that
+    surface during audits or incidents rather than proactive review.
+
+source_articles:
+  - title: "New Exim BDAT Vulnerability Exposes GnuTLS Builds to
+      Potential Code Execution"
+    url: "https://thehackernews.com/2026/05/new-exim-bdat-vulnerability-exposes.html"
+    date: "2026-05-12"
+
+  - title: "US govt seeks Instructure testimony on massive Canvas
+      cyberattack"
+    url: "https://www.bleepingcomputer.com/news/security/us-govt-seeks-instructure-testimony-on-massive-canvas-cyberattack/"
+    date: "2026-05-12"
+
+  - title: "Defense at AI speed: Microsoft's new multi-model agentic
+      security system tops leading industry benchmark"
+    url: "https://www.microsoft.com/en-us/security/blog/2026/05/12/defense-at-ai-speed-microsofts-new-multi-model-agentic-security-system/"
+    date: "2026-05-12"
+
+  - title: "Hackers Accessed BWH Hotels Reservation System for Months"
+    url: "https://securityaffairs.com/177xxx/data-breach/bwh-hotels-breach.html"
+    date: "2026-05-12"
+
+  - title: "Amazon Quick authorization bypass let users reach blocked
+      AI chat agents"
+    url: "https://www.helpnetsecurity.com/2026/05/12/amazon-quicksight-authorization-bypass/"
+    date: "2026-05-12"
+
+metadata:
+  author: "Am Dum Dee"
+  last_updated: "2026-05-12"
+  threat_category:
+    - "Dwell Time and Detection Failure"
+    - "Extortion and Operational Disruption"
+    - "Cloud Authorization Controls"
+    - "AI Vulnerability Discovery"
+    - "Hospitality and Education Data Breach"
+  affected_industries:
+    - "Hospitality and Travel"
+    - "Education Technology"
+    - "Cloud Services"
+    - "Any Windows-dependent enterprise"
+  confidence_level: "High"
