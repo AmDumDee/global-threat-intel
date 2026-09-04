@@ -1,0 +1,204 @@
+threat_summary:
+  title: "AI Coding Agents Run Attacker Code Before They Ever Ask Permission"
+  report_date: "2026-09-02"
+  threat_id: "TI-20260902-001"
+  severity_business: "High"
+  severity_technical: "Critical"
+
+  executive_summary: |
+    Researchers disclosed eight flaws across seven widely used AI coding assistants — including
+    Claude Code, Codex, Cursor, and others — where simply opening a downloaded or shared code
+    repository can trigger attacker-controlled commands to execute automatically, before any
+    trust prompt, approval dialog, or even login screen appears. Four of the eight remain
+    unpatched as of publication, with one vendor's fix confirmed incomplete days after shipping.
+
+    This matters because AI coding agents have quietly become privileged software on developer
+    machines: they run with the developer's own permissions, and organizations have rushed to
+    adopt them faster than security review has kept pace. The exploit path requires no
+    sophistication — a booby-trapped repository shared via USB drive, sync folder, or archive is
+    enough, and the malicious command runs as ordinary background "plumbing" the agent uses to
+    orient itself, not as a feature anyone consciously invoked.
+
+    No exploitation has been confirmed in the wild yet, but the flaw class is now public, several
+    vendors have not shipped fixes, and this is exactly the kind of low-effort, repository-based
+    trigger that scales easily for opportunistic attackers.
+
+  threat_intelligence:
+    what_happened:
+      incident_overview: |
+        The flaw lives in a routine step every AI coding agent performs the instant it opens a
+        project: checking Git's configuration to figure out which branch it's on and which files
+        changed. Git allows a repository to specify, in its own configuration file, a custom
+        command to run for this check. Because the AI agents call this check automatically in
+        the background, a malicious repository can plant a command that executes silently the
+        moment the agent starts working — with the developer's full system privileges, and no
+        approval step.
+
+        The trigger point varies by tool but is consistently earlier than any security checkpoint
+        a developer would expect: on some agents the malicious code fires before the workspace
+        trust prompt is even shown; on one, before the user has logged in at all; on another, on
+        the very first keystroke. In every case, the exploit requires no submitted prompt and no
+        AI model involvement — it runs before the AI itself is ever consulted.
+
+        Exploitation requires the victim to receive the repository as raw files with its hidden
+        Git configuration folder intact — which happens routinely via shared drives, sync
+        folders, USB sticks, or zipped archives, though not via a normal "git clone." This is a
+        common enough workflow (onboarding new developers, sharing sample code, contractor
+        handoffs) that the exposure is broader than it first appears.
+
+        Fixes have shipped for three of the seven tools, but researchers confirmed on retest that
+        four tools — plus a second, undisclosed vulnerable path in one already-patched tool — were
+        still executing attacker-supplied commands as of September 1-2, 2026.
+
+      affected_organizations:
+        - name: "Organizations using Claude Code, Hermes Agent, Qwen Code, or Grok Build"
+          impact: "Confirmed unpatched or incompletely patched exposure to silent, pre-approval code execution as of September 1-2, 2026."
+        - name: "Organizations using goose, Codex CLI/Desktop, or Cursor"
+          impact: "Patches available; unpatched or pinned-to-old-version installations remain exposed."
+
+      attack_methodology: |
+        An attacker crafts a repository with a malicious command embedded in its Git
+        configuration, then distributes it through any channel that preserves the hidden Git
+        folder — shared drives, archives, USB media. When a developer opens the folder with an AI
+        coding agent, the agent's routine startup check executes the attacker's command with the
+        developer's own system privileges, before any consent step.
+
+    why_it_matters:
+      business_risks:
+        financial_exposure: |
+          Pre-approval code execution on a developer machine can lead to source code theft,
+          credential harvesting, or lateral movement into build systems — costs comparable to any
+          endpoint compromise, but concentrated on the highest-value machines in the
+          organization: those with source code and deployment access.
+
+        regulatory_compliance: |
+          If exploited to exfiltrate customer data accessible from a developer's machine or to
+          tamper with software before release, this could trigger the same breach-notification and
+          software-supply-chain disclosure obligations as any other supply-chain compromise.
+
+        competitive_impact: |
+          Organizations that have promoted AI coding agents as a productivity advantage now carry
+          an unreviewed new privileged-execution surface on every machine running them; a public
+          incident tied to an AI coding tool would be a reputational setback disproportionate to
+          the tool's cost.
+
+        operational_disruption: |
+          Remediation is largely low-friction — patching, version pinning, and a global Git
+          configuration change — but auditing which developer machines ran vulnerable agent
+          versions against untrusted repositories requires an inventory effort many organizations
+          do not currently have in place for AI tooling.
+
+      industry_patterns:
+        affected_sectors:
+          - "Software development and engineering organizations"
+          - "Any organization with developers using AI coding assistants"
+
+        trend_analysis: |
+          This is not an isolated bug but a recurring flaw class: researchers note the same
+          "trust-dialog bypass via background Git call" pattern has appeared previously in Visual
+          Studio Code and JetBrains IDEs, and one of the Claude Code paths was reportedly
+          mitigated once already in November 2025 before resurfacing in a later release. AI coding
+          agents are inheriting old IDE-era security gaps faster than they are closing them.
+
+  technical_context:
+    vulnerability_details:
+      cve_identifier: "CVE-2026-72718 (goose, CVSS 7.0); CVE-2026-19592 and two other Codex CVEs; CVE-2026-71963 (Hermes Agent, unpublished); CVE-2026-55607 (Claude Code, related prior disclosure)"
+      vulnerability_type: "Pre-authorization command execution via Git configuration (core.fsmonitor and related keys)"
+      affected_systems:
+        - "goose (pre-1.44.0, patched)"
+        - "Codex CLI and Desktop (patched in latest versions)"
+        - "Claude Code (core.fsmonitor path patched; second 'ultrareview' path confirmed live September 1)"
+        - "Hermes Agent, Qwen Code, Grok Build (unpatched as of September 1-2)"
+        - "Cursor (patched)"
+      exploitation_status: "No confirmed in-the-wild exploitation as of September 2, 2026; not listed in CISA's Known Exploited Vulnerabilities catalog"
+
+    attack_indicators:
+      - "Unexplained processes or network connections launched immediately after opening a downloaded or shared code folder"
+      - "Unrecognized SSH keys, cron jobs, or scheduled tasks on developer workstations"
+      - "Developers reporting AI coding tools behaving unexpectedly on first open of externally received code"
+
+  strategic_response:
+    executive_decisions:
+      - priority: "Critical"
+        decision: "Mandate immediate patching or version-pinning verification for all AI coding agents in use (Claude Code, Codex, Cursor, goose, and others), and pause use of Hermes Agent, Qwen Code, and Grok Build against untrusted repositories until fixes ship."
+        business_justification: "Four tools remain confirmed exploitable with no user interaction required; this is a direct path to developer-machine compromise."
+        cost_estimate: "Low — patching and configuration changes only; primary cost is IT coordination time."
+      - priority: "High"
+        decision: "Set core.fsmonitor to false by default across all developer machines via global Git configuration, and require developers to inspect .git/config before opening any externally received repository with an AI agent."
+        business_justification: "This closes the exploit path even for agents without a vendor fix yet, at near-zero cost."
+        cost_estimate: "Minimal — a single configuration policy push."
+
+    governance_implications:
+      board_reporting: |
+        Track patch/version status of all AI coding agents in developer use, completion of the
+        global Git configuration hardening, and any confirmed incidents tied to externally
+        received repositories.
+
+      disclosure_requirements: |
+        No current regulatory trigger absent confirmed exploitation; however, this incident
+        strengthens the case for including AI coding tools explicitly in the organization's
+        software supply-chain and endpoint risk inventory ahead of any future incident.
+
+  analysis_and_insights:
+    uncomfortable_truths: |
+      Organizations rushed AI coding agents into developer workflows for productivity gains
+      without treating them as the privileged software they are. These tools run with full
+      developer permissions and now demonstrably execute untrusted code before any consent
+      screen — a security posture no organization would accept from a traditional IDE plugin, yet
+      it shipped quietly as background "plumbing."
+
+      The pattern of incomplete fixes — Claude Code patched once, still found vulnerable via a
+      second path; a startup sequence "moved" once already in November 2025 only to resurface —
+      suggests vendors are patching the specific report rather than the underlying design flaw
+      of executing untrusted repository configuration before any trust boundary is established.
+
+    strategic_lessons:
+      - "AI coding agents should be inventoried and governed as privileged endpoint software, not treated as productivity add-ons exempt from security review."
+      - "A vendor's patch for one reported path does not mean the underlying flaw class is closed — treat 'fixed' claims for pre-trust execution bugs with verification, not assumption."
+
+  forward_outlook:
+    predictions: |
+      Expect additional AI coding agents beyond the seven named here to be found vulnerable to
+      the same flaw class in the coming months, given researchers explicitly stated they found
+      the pattern in more agents than they disclosed publicly. Vendor patch completeness will
+      likely remain inconsistent given the November 2025-to-2026 recurrence already observed in
+      Claude Code.
+
+      More broadly, this reinforces a wider theme in enterprise AI adoption this week: industry
+      survey data shows a majority of organizations lack a comprehensive AI usage policy, and
+      most security leaders say they would not be ready for a significant attack today —
+      suggesting AI-tooling-specific vulnerabilities like this one will increasingly outpace
+      organizational readiness to respond to them.
+
+  source_articles:
+    - title: "Malicious .git Configs Can Make Claude, Codex, Cursor, and Other AI Agents Run Attacker Code"
+      url: "N/A (source text provided without URL)"
+      date: "2026-09-02"
+      key_contribution: "Primary incident source — full technical detail on the flaw class, affected agents, and patch status"
+    - title: "How to Secure Enterprise AI: From Adoption to Incident Readiness"
+      url: "N/A (source text provided without URL)"
+      date: "2026-09-02"
+      key_contribution: "Governance context — survey data on AI adoption/readiness gap supporting strategic response section"
+    - title: "Malicious Apache Modules Hijack Brazilian Government Site Traffic to Push Betting Pages"
+      url: "N/A (source text provided without URL)"
+      date: "2026-09-02"
+      key_contribution: "Parallel threat — not directly related to AI coding agent flaw"
+    - title: "BGP Hijack Delivers Malicious Virtualizor Update That Establishes Persistent Root Access"
+      url: "N/A (source text provided without URL)"
+      date: "2026-09-02"
+      key_contribution: "Parallel threat — supply-chain/update-mechanism angle, not directly related to today's primary incident"
+    - title: "Meta Ads Push StreamRat Android Trojan That Can Gain Near-Complete Device Control"
+      url: "N/A (source text provided without URL)"
+      date: "2026-09-02"
+      key_contribution: "Parallel threat — mobile malvertising campaign, not directly related to today's primary incident"
+
+metadata:
+  author: "Am Dum Dee"
+  last_updated: "2026-09-02"
+  threat_category:
+    - "AI/developer tooling vulnerability"
+    - "Pre-authorization code execution"
+  affected_industries:
+    - "Software and technology"
+    - "Any organization with developers using AI coding assistants"
+  confidence_level: "High"
