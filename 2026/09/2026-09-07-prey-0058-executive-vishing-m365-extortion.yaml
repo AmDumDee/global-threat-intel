@@ -1,0 +1,190 @@
+---
+threat_summary:
+  title: "Executive-Targeted Vishing Campaign Bypasses MFA to Extort Microsoft 365 Data"
+  report_date: "2026-09-07"
+  threat_id: "TI-20260907-001"
+  severity_business: "Critical"
+  severity_technical: "High"
+
+  executive_summary: |
+    A widespread threat cluster tracked as PREY-0058 is targeting company directors, VPs, and
+    executive staff with fake IT help-desk phone calls designed to steal authenticated Microsoft
+    365 login sessions in real time. Unlike traditional phishing, this attack defeats
+    multi-factor authentication by capturing the session token after a legitimate-looking login,
+    meaning stolen access looks identical to a normal, authorized sign-in to every security tool
+    watching for it.
+
+    The campaign has no malware component at all — no file is downloaded, no endpoint alert
+    fires. Attackers gain access, quietly search SharePoint and mailbox data to determine what is
+    valuable, exfiltrate it in bulk from SharePoint, OneDrive, and Exchange, then send extortion
+    demands. Targets concentrate in construction and engineering, healthcare, real estate,
+    finance, and professional services across the U.S.
+
+    Boards should treat this as confirmation that MFA compliance checkboxes do not equal identity
+    security. This attack specifically targets the population — senior executives — with the
+    broadest data access and the least day-to-day interaction with IT security training.
+
+  threat_intelligence:
+    what_happened:
+      incident_overview: |
+        The attack begins with a phone call from someone impersonating internal IT or help desk
+        staff, directing the target to a lookalike authentication page (patterns like
+        "mfaregister.com" or "setpasskey.com" combined with the victim's company name). The
+        target completes what appears to be a normal Microsoft 365 login and MFA approval — but
+        the page is operator-controlled, capturing both credentials and the resulting session
+        token in an adversary-in-the-middle relay.
+
+        With a valid session token in hand, attackers replay it from residential proxy
+        infrastructure and IP addresses matched to the victim's own geographic region and
+        internet provider, specifically to avoid triggering "impossible travel" or
+        unfamiliar-location alerts that would normally flag a compromised account.
+
+        Once inside, the attackers do not deploy any malware or move laterally across the
+        network — behavior notably absent compared to most breach campaigns. Instead, they
+        methodically search SharePoint and Microsoft Entra ID to map out what data exists and
+        where, then perform bulk collection and exfiltration from SharePoint, OneDrive, Exchange,
+        and Box before issuing extortion demands directly to the victim organization.
+
+        Researchers note this activity shares tradecraft with other tracked extortion clusters,
+        suggesting a shared pool of phishing infrastructure and techniques used by multiple
+        overlapping or rebranding criminal groups, rather than a single fixed actor identity.
+
+      affected_organizations:
+        - name: "U.S. organizations in construction/engineering, healthcare, real estate, finance, and professional services"
+          impact: "Executive-level Microsoft 365 accounts compromised via session hijacking; bulk data exfiltration from SharePoint, OneDrive, and Exchange followed by extortion demands."
+
+      attack_methodology: |
+        Attackers call a target posing as internal IT, direct them to a fake authentication page
+        that relays their real login and MFA approval to the attacker in real time, then reuse
+        the resulting session token from proxy infrastructure matched to the victim's location to
+        access and exfiltrate data undetected before extorting the organization.
+
+    why_it_matters:
+      business_risks:
+        financial_exposure: |
+          Extortion demands in campaigns of this type commonly range from tens of thousands to
+          low millions of dollars depending on data sensitivity and organization size, separate
+          from incident response, legal, and potential regulatory costs tied to the underlying
+          data exposure.
+
+        regulatory_compliance: |
+          Bulk exfiltration from Exchange and SharePoint frequently captures regulated data
+          (health records, financial information, PII) depending on sector, triggering
+          breach-notification obligations under HIPAA, state privacy laws, or sector-specific
+          regulations once the scope of exfiltrated data is confirmed.
+
+        competitive_impact: |
+          Executive account compromise carries reputational risk beyond the data itself — client
+          contracts, competitive strategy, and internal communications commonly stored in
+          executive mailboxes and SharePoint are exactly the kind of material extortion groups
+          threaten to leak to maximize payment pressure.
+
+        operational_disruption: |
+          Because no malware or network lateral movement occurs, recovery is primarily an
+          identity and access problem: session and credential revocation, executive account
+          re-verification, and a full audit of what data was accessed — typically a multi-day
+          forensic effort given the campaign's design to blend into normal login activity.
+
+      industry_patterns:
+        affected_sectors:
+          - "Construction and engineering"
+          - "Healthcare and pharmaceuticals"
+          - "Real estate and property management"
+          - "Finance and professional services"
+
+        trend_analysis: |
+          This continues an accelerating shift in extortion tradecraft away from
+          malware-and-ransomware toward pure identity-based data theft — no endpoint compromise
+          required at all. Combined with this week's disclosure of a related AitM phishing kit
+          (Knight Office) using similar Docusign-themed lures and token-replay techniques, this
+          confirms session hijacking via help-desk impersonation is now an established,
+          repeatable playbook across multiple criminal groups rather than an isolated technique.
+
+  technical_context:
+    vulnerability_details:
+      cve_identifier: "N/A — social engineering and adversary-in-the-middle token theft, not a software vulnerability"
+      vulnerability_type: "Vishing-initiated adversary-in-the-middle (AitM) MFA and session token theft"
+      affected_systems:
+        - "Microsoft 365 (SharePoint, OneDrive, Exchange)"
+        - "Box"
+      exploitation_status: "Active — ongoing campaign with hundreds of lure subdomains identified impersonating real companies"
+
+    attack_indicators:
+      - "Executive reports of unexpected 'IT support' calls requesting MFA or passkey re-registration"
+      - "Session sign-ins to 'My Signins,' 'My Profile,' or 'My Apps' from unfamiliar proxy infrastructure matching the victim's own region"
+      - "Bulk SharePoint search activity or large-volume downloads from OneDrive/Exchange outside normal user behavior"
+
+  strategic_response:
+    executive_decisions:
+      - priority: "Critical"
+        decision: "Deploy phishing-resistant MFA (FIDO2 hardware keys or platform passkeys) for all executive and privileged accounts, replacing app-based push or SMS MFA approval."
+        business_justification: "This campaign specifically defeats standard MFA by capturing the session after approval; phishing-resistant MFA breaks the AitM relay mechanism entirely."
+        cost_estimate: "Moderate — hardware key procurement and rollout for executive population, typically low five figures for a mid-size leadership team."
+      - priority: "Critical"
+        decision: "Mandate a strict verification policy for all help desk contact — no MFA or credential changes processed via inbound phone call without independent callback verification."
+        business_justification: "The entry point for this entire campaign is a phone call impersonating IT; closing this single procedural gap removes the attack's initial access vector."
+        cost_estimate: "Minimal — policy and help desk training update."
+
+    governance_implications:
+      board_reporting: |
+        Report phishing-resistant MFA rollout completion for executive/privileged accounts, help
+        desk vishing training completion rate, and any confirmed session-replay or anomalous
+        SharePoint access indicators identified during review.
+
+      disclosure_requirements: |
+        If confirmed exfiltration included regulated data (health, financial, or personal
+        information), assess breach notification obligations under applicable sector-specific and
+        state privacy laws before any public statement or extortion response decision.
+
+  analysis_and_insights:
+    uncomfortable_truths: |
+      Most organizations treat MFA as a solved problem the moment it's enabled — a checkbox on a
+      compliance audit. This campaign demonstrates that MFA enrollment status tells you nothing
+      about resistance to session hijacking. An account with MFA enabled and a stolen session
+      token looks, to nearly every security tool, exactly like a legitimate authenticated user.
+
+      Executives are targeted precisely because they are the population least likely to sit
+      through routine phishing training and most likely to comply quickly with an "IT support"
+      call given time pressure and assumed authority — the same qualities that make them valuable
+      targets also make them the least defended.
+
+    strategic_lessons:
+      - "MFA type matters more than MFA presence — phishing-resistant methods (hardware keys, passkeys) are not interchangeable with app-based push approval against this attack class."
+      - "Help desk and IT support channels are now a primary social engineering attack surface and need the same verification discipline as financial wire-transfer approval processes."
+
+  forward_outlook:
+    predictions: |
+      Expect continued growth in AitM session-hijacking campaigns over the next six to twelve
+      months as attackers increasingly recognize that stealing an authenticated session is more
+      reliable and less detectable than deploying malware — this week's parallel disclosure of
+      the Knight Office phishing kit confirms multiple independent groups are converging on the
+      same technique simultaneously.
+
+      Organizations that delay phishing-resistant MFA adoption for executive accounts should
+      expect to remain squarely in the target profile these campaigns are optimized for, given
+      the demonstrated focus on high-data-access, lower-security-friction individuals across
+      multiple industry verticals.
+
+  source_articles:
+    - title: "Fake IT Calls Target Executives in Microsoft 365 Data Theft and Extortion Attacks"
+      url: "N/A (source text provided without URL)"
+      date: "2026-09-07"
+    - title: "Weekly Recap: Chrome 0-Day, Router Hijacks, Coder Supply Chain Attack and More"
+      url: "N/A (source text provided without URL)"
+      date: "2026-09-07"
+    - title: "PEEP Turns Chrome and Edge Into Post-Compromise Backdoors for Host Command Execution"
+      url: "N/A (source text provided without URL)"
+      date: "2026-09-07"
+    - title: "Rogue ScreenConnect Clients Spread Four-Stage VBScript Chain to Newly Connected Hosts"
+      url: "N/A (source text provided without URL)"
+      date: "2026-09-07"
+    - title: "Your Cloud Security Checklist Doesn't Work the Way You Think It Does"
+      url: "N/A (source text provided without URL)"
+      date: "2026-09-07"
+
+metadata:
+  author: "Am Dum Dee"
+  last_updated: "2026-09-07"
+  threat_category: ["Identity-based extortion", "Adversary-in-the-middle phishing"]
+  affected_industries: ["Construction and engineering", "Healthcare", "Finance and professional services"]
+  confidence_level: "High"
